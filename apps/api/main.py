@@ -1,22 +1,30 @@
 """
-audiobook-cleaner-lab API 占位模块
+audiobook-cleaner-lab FastAPI 后端
 
-Round 00 说明：
-- 本文件仅为 FastAPI 后端占位，不强制安装 FastAPI 即可通过仓库检查。
-- 后续 Round 将逐步引入真实路由与服务。
-
-未来 API 路由规划（草案）：
-- GET  /health              — 健康检查
-- POST /projects            — 创建书籍项目
-- GET  /projects/{id}       — 获取项目 manifest
-- POST /chapters/{id}/asr   — 触发 ASR（mock/真实 Adapter）
-- POST /chapters/{id}/align — 生成 alignment.json
-- POST /chapters/{id}/llm-cut — 生成 llm_cut_decision.json
-- GET  /chapters/{id}/review — 获取 review 数据
-- POST /chapters/{id}/cut-plan — 保存 cut_plan.json
-- POST /chapters/{id}/export — FFmpeg 导出
-
-当前默认假设：单用户本地运行，SQLite 持久化（Round 01 起设计）。
+Round 06 起提供 Review API。未安装 FastAPI 时本模块仍可被 check_repo 引用。
 """
 
-# Round 00：不导入 FastAPI，避免未安装依赖导致检查失败
+from __future__ import annotations
+
+try:
+    from fastapi import FastAPI
+    from fastapi.middleware.cors import CORSMiddleware
+
+    from apps.api.routes.review import router as review_router
+
+    app = FastAPI(
+        title="audiobook-cleaner-lab API",
+        version="0.1.0",
+        description="有声书清洗流水线 API — Review / 导出等",
+    )
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+    app.include_router(review_router)
+
+except ImportError:
+    app = None  # type: ignore[assignment]

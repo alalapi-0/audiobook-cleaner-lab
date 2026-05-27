@@ -33,6 +33,20 @@ Round 04 alignment 可用。
 - 不接真实付费 LLM API
 - 不执行 FFmpeg
 
+## 完成记录
+
+- [x] `packages/llm_core/adapters/mock.py` — MockLlmAdapter
+- [x] `packages/llm_core/service.py` — LlmCutService
+- [x] `prompts/llm_cut_decision/system_mock.md`
+- [x] `scripts/run_llm_cut.py`
+- [x] `tests/test_llm_cut_decision.py` — 4 项测试
+
+## 验收结果
+
+```bash
+python3 -m unittest tests.test_llm_cut_decision -v  # 4 tests OK
+```
+
 ## 下一轮衔接
 
 Round 06：Review UI MVP

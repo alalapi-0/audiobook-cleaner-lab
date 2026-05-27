@@ -1,5 +1,7 @@
 # Round 06 — 人工校正页面 MVP
 
+**状态：已完成（2026-05-27）**
+
 ## Round 目标
 
 网页查看原文、ASR、模型建议，支持确认/驳回/不确定，保存 `user_review.json` 与 `cut_plan.json`。

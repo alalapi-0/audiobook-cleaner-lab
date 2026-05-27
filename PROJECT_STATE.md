@@ -4,15 +4,15 @@
 
 ## 当前 Stage
 
-**Stage 5 — 大模型机切建议**
+**Stage 6 — 人工校正页面 MVP**
 
 ## 当前 Round
 
-**Round 05 — LLM 机切建议**（已完成，下一轮 Round 06）
+**Round 06 — Review UI MVP**（已完成，下一轮 Round 07）
 
 ## 当前状态
 
-`LLM mock 可用` — MockLlmAdapter、LlmCutService、run_llm_cut CLI 已实现。
+`Review UI MVP 可用` — FastAPI Review API、React 三栏页面、user_review/cut_plan 保存已实现。
 
 ## 已完成内容
 
@@ -38,6 +38,9 @@
 - [x] MockLlmAdapter、LlmCutService（Round 05）
 - [x] `scripts/run_llm_cut.py` CLI
 - [x] `tests/test_llm_cut_decision.py`（4 项测试）
+- [x] ReviewService、FastAPI review 路由（Round 06）
+- [x] React Review 三栏 MVP（`apps/web/`）
+- [x] `tests/test_review_api.py`（3 项测试）
 
 ## 未完成内容
 
@@ -46,16 +49,16 @@
 - [x] 文本清洗 normalizer（Round 03）
 - [x] 对齐 alignment（Round 04）
 - [x] LLM 机切建议（Round 05）
-- [ ] Review 网页 MVP（Round 06）
+- [x] Review 网页 MVP（Round 06）
 - [ ] 波形编辑器（Round 07）
 - [ ] FFmpeg 导出（Round 08）
 - [ ] 反馈闭环（Round 09）
 - [ ] 批处理（Round 10）
 - [ ] 本地一键启动（Round 11）
 
-## 下一轮目标（Round 06）
+## 下一轮目标（Round 07）
 
-Review UI MVP：Vite + React 三栏布局，保存 user_review 与 cut_plan。
+wavesurfer.js 波形编辑器与切点拖动微调。
 
 ## 当前风险
 
@@ -85,6 +88,8 @@ Review UI MVP：Vite + React 三栏布局，保存 user_review 与 cut_plan。
 
 | 日期 | Round | 摘要 |
 |------|-------|------|
+| 2026-05-27 | Round 06 | Review API、React Review MVP、user_review/cut_plan |
+| 2026-05-27 | Round 05 | MockLlmAdapter、LlmCutService、run_llm_cut CLI |
 | 2026-05-27 | Round 04 | BaselineAligner、AlignmentService、run_align CLI |
 | 2026-05-27 | Round 03 | source/asr normalizer、filler_detector、run_normalize CLI |
 | 2026-05-27 | Round 02 | MockAsrAdapter、ImportTranscriptAdapter、run_asr CLI |

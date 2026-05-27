@@ -1,11 +1,12 @@
 {
   "name": "audiobook-cleaner-lab-web",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
-  "description": "audiobook-cleaner-lab 前端占位 — React + Vite + TypeScript（Round 06 起实现）",
+  "description": "audiobook-cleaner-lab 前端 — React + Vite + TypeScript Review MVP",
   "scripts": {
-    "dev": "echo 'Round 00: 前端尚未实现，请等待 Round 06'",
-    "build": "echo 'Round 00: 前端尚未实现'"
+    "dev": "cd apps/web && npm run dev",
+    "build": "cd apps/web && npm run build",
+    "preview": "cd apps/web && npm run preview"
   },
   "engines": {
     "node": ">=18"
