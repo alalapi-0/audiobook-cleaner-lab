@@ -4,15 +4,15 @@
 
 ## 当前 Stage
 
-**Stage 1 — 素材导入与项目 Manifest**
+**Stage 2 — ASR 识别与 transcript.json**
 
 ## 当前 Round
 
-**Round 01 — 素材导入与 Manifest**（已完成，下一轮 Round 02）
+**Round 02 — ASR 基线**（已完成，下一轮 Round 03）
 
 ## 当前状态
 
-`素材导入可用` — 已实现 project/chapter manifest schema、ManifestService 与 import_manifest CLI，单元测试通过。
+`ASR mock 可用` — MockAsrAdapter、ImportTranscriptAdapter、run_asr CLI 已实现，单元测试通过。
 
 ## 已完成内容
 
@@ -26,11 +26,14 @@
 - [x] manifest schema（`apps/api/schemas/manifest.py`）
 - [x] ManifestService 与 `scripts/import_manifest.py` CLI
 - [x] `tests/test_manifest_schema.py`（6 项测试）
+- [x] MockAsrAdapter、ImportTranscriptAdapter、AsrService（Round 02）
+- [x] `scripts/run_asr.py` CLI
+- [x] `tests/test_asr_baseline.py`（3 项测试）
 
 ## 未完成内容
 
 - [x] 项目/章节导入与 manifest（Round 01）
-- [ ] ASR mock 与 transcript（Round 02）
+- [x] ASR mock 与 transcript（Round 02）
 - [ ] 文本清洗 normalizer（Round 03）
 - [ ] 对齐 alignment（Round 04）
 - [ ] LLM 机切建议（Round 05）

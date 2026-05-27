@@ -1,5 +1,7 @@
 # Round 02 — ASR 基线
 
+**状态：已完成（2026-05-27）**
+
 ## Round 目标
 
 输入章节音频路径，输出带 segment 时间戳的 `transcript.json`（mock 或手动导入）。
