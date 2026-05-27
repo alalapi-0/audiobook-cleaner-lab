@@ -1,5 +1,7 @@
 # Round 10 — 批处理
 
+**状态：已完成（2026-05-27）**
+
 ## Round 目标
 
 整本书多章节队列处理、状态管理、失败重试。
@@ -26,6 +28,10 @@ Round 02–09 单章流程可跑通（mock 亦可）。
 ## 不做什么
 
 - 不做分布式任务队列
+
+## 完成记录
+
+- [x] `scripts/batch_process.py` — 顺序执行 ASR→normalize→align→llm→auto_review→export dry-run→feedback
 
 ## 下一轮衔接
 
