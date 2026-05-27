@@ -34,11 +34,11 @@
 
 ## 当前状态
 
-- **Stage 0 — 仓库治理与项目骨架**
-- **Round 00 — 仓库初始化**（本轮）
-- 尚无业务实现，仅有文档、骨架与检查脚本
+- **Stage 1 — 素材导入与项目 Manifest**
+- **Round 01 — 素材导入与 Manifest**（已完成）
+- 已实现 manifest schema、ManifestService 与 `scripts/import_manifest.py` CLI
 
-后续按 `rounds/` 目录逐轮推进。
+后续按 `rounds/` 目录逐轮推进（当前 Round 02 — ASR 基线）。
 
 ## 大文件与 Git 策略
 
@@ -57,9 +57,17 @@ python scripts/check_repo.py
 
 两次 `check_repo.py` 均应输出「仓库骨架检查通过」。
 
-## 下一轮 Round 01
+## 素材导入（Round 01）
 
-实现书籍/章节项目导入与 `project_manifest.json` / `chapter_manifest.json` schema，详见 `rounds/round-01-import-manifest.md`。
+```bash
+python3 scripts/import_manifest.py create-project --project-id book_001 --title "示例有声书"
+python3 scripts/import_manifest.py add-chapter \
+  --project-id book_001 --chapter-id chapter_001 --title "第一章" \
+  --audio data/raw_audio/book_001/chapter_001.wav \
+  --text data/source_text/book_001/chapter_001.txt
+```
+
+详见 `rounds/round-01-import-manifest.md`。
 
 ## 快速导航
 

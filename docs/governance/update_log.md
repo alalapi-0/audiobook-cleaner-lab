@@ -1,5 +1,27 @@
 # 治理协议更新日志
 
+## Round 01 — 2026-05-27 — 素材导入与 Manifest
+
+### 新增代码
+
+- `apps/api/schemas/manifest.py` — manifest dataclass schema
+- `apps/api/services/manifest_service.py` — 项目/章节 CRUD 与路径校验
+- `scripts/import_manifest.py` — CLI 导入工具
+- `tests/test_manifest_schema.py` — schema 与服务单元测试
+
+### 变更
+
+- `scripts/init_data_dirs.py` — 新增 `data/projects/` 子目录
+- `PROJECT_STATE.md` — Stage 1 / Round 01 完成
+
+### 默认假设
+
+- manifest 存于 `data/projects/{project_id}/`
+- 章节 manifest 存于 `data/projects/{project_id}/chapters/{chapter_id}/`
+- 使用 stdlib dataclass，Round 02 前不引入 Pydantic 依赖
+
+---
+
 ## Round 00 — 2026-05-27 — 仓库初始化
 
 ### 创建了哪些目录

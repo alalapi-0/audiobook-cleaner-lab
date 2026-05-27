@@ -4,15 +4,15 @@
 
 ## 当前 Stage
 
-**Stage 0 — 仓库治理与项目骨架**
+**Stage 1 — 素材导入与项目 Manifest**
 
 ## 当前 Round
 
-**Round 00 — 仓库初始化**
+**Round 01 — 素材导入与 Manifest**（已完成，下一轮 Round 02）
 
 ## 当前状态
 
-`仓库初始化` — 骨架、治理协议、设计文档与检查脚本已建立，尚无业务代码实现。
+`素材导入可用` — 已实现 project/chapter manifest schema、ManifestService 与 import_manifest CLI，单元测试通过。
 
 ## 已完成内容
 
@@ -23,10 +23,13 @@
 - [x] `scripts/check_repo.py` 与 `scripts/init_data_dirs.py`
 - [x] packages 六模块占位（audio/asr/text/alignment/llm/feedback）
 - [x] `.gitignore` 排除 data 真实内容与音频大文件
+- [x] manifest schema（`apps/api/schemas/manifest.py`）
+- [x] ManifestService 与 `scripts/import_manifest.py` CLI
+- [x] `tests/test_manifest_schema.py`（6 项测试）
 
 ## 未完成内容
 
-- [ ] 项目/章节导入与 manifest（Round 01）
+- [x] 项目/章节导入与 manifest（Round 01）
 - [ ] ASR mock 与 transcript（Round 02）
 - [ ] 文本清洗 normalizer（Round 03）
 - [ ] 对齐 alignment（Round 04）
@@ -38,9 +41,9 @@
 - [ ] 批处理（Round 10）
 - [ ] 本地一键启动（Round 11）
 
-## 下一轮目标（Round 01）
+## 下一轮目标（Round 02）
 
-实现书籍项目与章节导入，生成 `project_manifest.json` 与 `chapter_manifest.json` schema 及最小 CLI/API 占位。
+实现 MockAsrAdapter、ImportTranscriptAdapter 与 `transcript.json` 生成，CLI `run-asr`。
 
 ## 当前风险
 
@@ -70,4 +73,5 @@
 
 | 日期 | Round | 摘要 |
 |------|-------|------|
+| 2026-05-27 | Round 01 | manifest schema、ManifestService、import_manifest CLI、单元测试 |
 | 2026-05-27 | Round 00 | 仓库初始化、治理协议、设计文档、检查脚本 |

@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 # 需要创建的 data 子目录
 DATA_SUBDIRS = [
+    "data/projects",
     "data/raw_audio",
     "data/source_text",
     "data/transcripts",

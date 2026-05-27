@@ -1,5 +1,7 @@
 # Round 01 — 素材导入与 Manifest
 
+**状态：已完成（2026-05-27）**
+
 ## Round 目标
 
 支持创建书籍项目、章节，登记音频与原文路径，生成 `project_manifest.json` 与 `chapter_manifest.json`。
@@ -31,6 +33,21 @@ Round 00 验收通过。
 
 - 不跑 ASR
 - 不把真实音频提交 Git
+
+## 完成记录
+
+- [x] `apps/api/schemas/manifest.py` — ProjectManifest / ChapterManifest schema
+- [x] `apps/api/services/manifest_service.py` — 创建项目、添加章节、路径校验
+- [x] `scripts/import_manifest.py` — CLI（create-project / add-chapter）
+- [x] `tests/test_manifest_schema.py` — 6 项单元测试
+- [x] `scripts/init_data_dirs.py` — 新增 `data/projects/`
+
+## 验收结果
+
+```bash
+python3 scripts/check_repo.py          # 通过
+python3 -m unittest tests.test_manifest_schema -v  # 6 tests OK
+```
 
 ## 下一轮衔接
 
