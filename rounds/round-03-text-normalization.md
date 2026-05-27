@@ -1,5 +1,7 @@
 # Round 03 — 文本正则清洗
 
+**状态：已完成（2026-05-27）**
+
 ## Round 目标
 
 实现 `source_text_normalizer`、`asr_text_normalizer`、`filler_detector`（候选标记）。

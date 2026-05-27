@@ -4,15 +4,15 @@
 
 ## 当前 Stage
 
-**Stage 2 — ASR 识别与 transcript.json**
+**Stage 3 — 文本正则清洗**
 
 ## 当前 Round
 
-**Round 02 — ASR 基线**（已完成，下一轮 Round 03）
+**Round 03 — 文本正则清洗**（已完成，下一轮 Round 04）
 
 ## 当前状态
 
-`ASR mock 可用` — MockAsrAdapter、ImportTranscriptAdapter、run_asr CLI 已实现，单元测试通过。
+`文本清洗可用` — source/asr normalizer、filler_detector、run_normalize CLI 已实现。
 
 ## 已完成内容
 
@@ -29,12 +29,15 @@
 - [x] MockAsrAdapter、ImportTranscriptAdapter、AsrService（Round 02）
 - [x] `scripts/run_asr.py` CLI
 - [x] `tests/test_asr_baseline.py`（3 项测试）
+- [x] source/asr normalizer、filler_detector（Round 03）
+- [x] `scripts/run_normalize.py` CLI
+- [x] `tests/test_text_normalization.py`（7 项测试）
 
 ## 未完成内容
 
 - [x] 项目/章节导入与 manifest（Round 01）
 - [x] ASR mock 与 transcript（Round 02）
-- [ ] 文本清洗 normalizer（Round 03）
+- [x] 文本清洗 normalizer（Round 03）
 - [ ] 对齐 alignment（Round 04）
 - [ ] LLM 机切建议（Round 05）
 - [ ] Review 网页 MVP（Round 06）
@@ -44,9 +47,9 @@
 - [ ] 批处理（Round 10）
 - [ ] 本地一键启动（Round 11）
 
-## 下一轮目标（Round 02）
+## 下一轮目标（Round 04）
 
-实现 MockAsrAdapter、ImportTranscriptAdapter 与 `transcript.json` 生成，CLI `run-asr`。
+实现 alignment_core 基础对齐器，生成 alignment.json。
 
 ## 当前风险
 
@@ -76,5 +79,6 @@
 
 | 日期 | Round | 摘要 |
 |------|-------|------|
+| 2026-05-27 | Round 02 | MockAsrAdapter、ImportTranscriptAdapter、run_asr CLI |
 | 2026-05-27 | Round 01 | manifest schema、ManifestService、import_manifest CLI、单元测试 |
 | 2026-05-27 | Round 00 | 仓库初始化、治理协议、设计文档、检查脚本 |

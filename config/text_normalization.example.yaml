@@ -1,0 +1,15 @@
+# 文本规范化配置示例 — 复制为 config/text_normalization.yaml 后按需修改
+# 本文件可提交 Git，不含 secrets
+
+punctuation_mode: fullwidth
+
+filler_tokens:
+  - 嗯
+  - 啊
+  - 呃
+  - 那个
+  - 就是
+  - 然后
+
+heading_patterns:
+  - "^第[一二三四五六七八九十百千\\d]+章"

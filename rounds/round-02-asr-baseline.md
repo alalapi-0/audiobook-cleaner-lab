@@ -31,6 +31,22 @@ Round 01 manifest 可用。
 
 - 不接真实 Whisper API（可留接口）
 
+## 完成记录
+
+- [x] `packages/asr_core/base.py` — AsrAdapter 接口
+- [x] `packages/asr_core/adapters/mock.py` — MockAsrAdapter
+- [x] `packages/asr_core/adapters/import_adapter.py` — ImportTranscriptAdapter
+- [x] `packages/asr_core/service.py` — AsrService，更新 chapter manifest
+- [x] `scripts/run_asr.py` — CLI
+- [x] `tests/test_asr_baseline.py` — 3 项测试
+
+## 验收结果
+
+```bash
+python3 scripts/check_repo.py
+python3 -m unittest tests.test_asr_baseline -v  # 3 tests OK
+```
+
 ## 下一轮衔接
 
 Round 03：文本正则清洗

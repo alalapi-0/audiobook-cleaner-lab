@@ -1,5 +1,26 @@
 # 治理协议更新日志
 
+## Round 03 — 2026-05-27 — 文本正则清洗
+
+### 新增代码
+
+- `packages/text_core/` — normalizers、filler_detector、service
+- `config/text_normalization.example.yaml`
+- `scripts/run_normalize.py`
+- `tests/test_text_normalization.py`
+
+---
+
+## Round 02 — 2026-05-27 — ASR 基线
+
+### 新增代码
+
+- `packages/asr_core/` — AsrAdapter、MockAsrAdapter、ImportTranscriptAdapter、AsrService
+- `scripts/run_asr.py` — ASR CLI
+- `tests/test_asr_baseline.py`
+
+---
+
 ## Round 01 — 2026-05-27 — 素材导入与 Manifest
 
 ### 新增代码
