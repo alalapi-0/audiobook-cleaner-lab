@@ -1,5 +1,27 @@
 # 治理协议更新日志
 
+## Round 11 — 2026-05-27 — 本地一键启动
+
+- `scripts/check_environment.py`
+- `scripts/start_local.sh`
+- README 完整教程
+
+---
+
+## Round 10 — 2026-05-27 — 批处理
+
+- `scripts/batch_process.py`
+
+---
+
+## Round 09 — 2026-05-27 — 反馈闭环
+
+- `packages/feedback_core/`
+- `scripts/run_feedback.py`
+- `tests/test_feedback.py`
+
+---
+
 ## Round 08 — 2026-05-27 — FFmpeg 导出
 
 ### 新增代码

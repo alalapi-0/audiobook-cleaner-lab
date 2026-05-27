@@ -4,73 +4,62 @@
 
 ## 当前 Stage
 
-**Stage 8 — FFmpeg 非破坏式导出**
+**Stage 11 — 本地运行与使用体验（全部 Stage 0–11 已完成）**
 
 ## 当前 Round
 
-**Round 08 — FFmpeg 导出**（已完成，下一轮 Round 09）
+**Round 11 — 本地一键启动**（已完成）
 
 ## 当前状态
 
-`端到端流水线 MVP 可用` — Round 01–08 已实现：导入 → ASR mock → 清洗 → 对齐 → LLM mock → Review UI → 波形 → FFmpeg 导出。
+`端到端 mock 流水线可运行` — Round 00–11 全部完成。用户可导入素材、跑 mock ASR/LLM、Web Review、波形微调、FFmpeg 导出与反馈分析。
 
 ## 已完成内容
 
-- [x] Round 01 — manifest schema、ManifestService、import_manifest CLI
-- [x] Round 02 — MockAsrAdapter、ImportTranscriptAdapter、run_asr CLI
-- [x] Round 03 — source/asr normalizer、filler_detector、run_normalize CLI
-- [x] Round 04 — BaselineAligner、AlignmentService、run_align CLI
-- [x] Round 05 — MockLlmAdapter、LlmCutService、run_llm_cut CLI
-- [x] Round 06 — ReviewService、FastAPI、React Review 三栏 MVP
-- [x] Round 07 — WaveformEditor（wavesurfer.js）、cut-plan 微调 API
-- [x] Round 08 — FfmpegExporter、ExportService、run_export CLI
+- [x] Round 00 — 仓库骨架与治理
+- [x] Round 01 — manifest 导入
+- [x] Round 02 — ASR mock
+- [x] Round 03 — 文本清洗
+- [x] Round 04 — 对齐
+- [x] Round 05 — LLM mock 机切
+- [x] Round 06 — Review UI MVP
+- [x] Round 07 — 波形编辑器
+- [x] Round 08 — FFmpeg 导出
+- [x] Round 09 — 反馈闭环
+- [x] Round 10 — 批处理
+- [x] Round 11 — 环境检查与一键启动
 
-## 未完成内容
+## 下一轮目标
 
-- [ ] 反馈闭环（Round 09）
-- [ ] 批处理（Round 10）
-- [ ] 本地一键启动（Round 11）
-
-## 下一轮目标（Round 09）
-
-实现 feedback_record 收集与规则优化建议。
+进入维护迭代。新需求开 Stage 12+ 或新 Round：
+- 真实 ASR Adapter（Whisper / faster-whisper）
+- 真实 LLM Adapter（OpenAI 兼容 API）
+- SQLite 持久化
+- docker-compose
 
 ## 当前风险
 
 | 风险 | 说明 | 缓解 |
 |------|------|------|
-| ASR 时间戳不准 | 影响切点与对齐 | 人工 Review + padding 可调 |
-| LLM 误删正文 | 高置信度自动删除风险 | uncertain 必须人工确认；低置信不自动删 |
-| 对齐算法局限 | 重读/口误场景复杂 | 多 status 类型 + LLM + 人工 |
-| 大文件 Git 误提交 | 音频进仓库 | .gitignore + check_repo 规则 |
-| 前端需 npm install | Round 06+ 前端依赖 | 文档说明 `cd apps/web && npm install` |
-
-## 当前默认假设
-
-1. 中文有声书，个人本地单用户
-2. Python 3.10+，FastAPI + React/Vite + FFmpeg
-3. ASR/LLM 通过 Adapter 可替换，当前使用 mock
-4. 非破坏式编辑，原音频只读
-5. 本地 FFmpeg 已安装（macOS Homebrew）
+| mock 与真实 ASR 差距 | 切点精度未知 | 接入真实 Adapter 后回归测试 |
+| 前端未 CI 构建 | npm 依赖本地安装 | README + check_environment |
+| 对齐算法简单 | 复杂口误场景 | LLM + 人工 Review |
 
 ## 用户需要准备的内容
 
-- 原始章节音频（wav/mp3，放 `data/raw_audio/`）
-- 对应正确原文文本（放 `data/source_text/`）
-- 本地 FFmpeg（Round 08 起需要）
-- Node.js 18+（Round 06 前端）
-- 可选：ASR/LLM API Key（通过 `.env`，不进 Git）
+- 原始章节音频 + 原文文本（放 `data/`）
+- Python 3.10+、FFmpeg、Node.js 18+
+- 可选：ASR/LLM API Key（`.env`，不进 Git）
 
 ## 最近更新记录
 
 | 日期 | Round | 摘要 |
 |------|-------|------|
-| 2026-05-27 | Round 08 | FfmpegExporter、ExportService、run_export CLI |
-| 2026-05-27 | Round 07 | WaveformEditor、cut-plan API、音频只读路由 |
-| 2026-05-27 | Round 06 | Review API、React Review MVP、user_review/cut_plan |
-| 2026-05-27 | Round 05 | MockLlmAdapter、LlmCutService、run_llm_cut CLI |
-| 2026-05-27 | Round 04 | BaselineAligner、AlignmentService、run_align CLI |
-| 2026-05-27 | Round 03 | source/asr normalizer、filler_detector |
-| 2026-05-27 | Round 02 | MockAsrAdapter、ImportTranscriptAdapter |
-| 2026-05-27 | Round 01 | manifest schema、ManifestService |
+| 2026-05-27 | Round 11 | check_environment、start_local.sh、README 教程 |
+| 2026-05-27 | Round 10 | batch_process.py 多章节批处理 |
+| 2026-05-27 | Round 09 | FeedbackService、feedback_record |
+| 2026-05-27 | Round 08 | FfmpegExporter、run_export |
+| 2026-05-27 | Round 07 | WaveformEditor、wavesurfer.js |
+| 2026-05-27 | Round 06 | Review API + React MVP |
+| 2026-05-27 | Round 01–05 | 核心 Python 流水线 |
 | 2026-05-27 | Round 00 | 仓库初始化 |

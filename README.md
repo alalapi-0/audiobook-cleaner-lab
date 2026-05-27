@@ -8,66 +8,81 @@
 
 这不是通用 DAW 剪辑软件，而是一条 **原文 + ASR + LLM + 人工 Review + FFmpeg** 的专用流水线。
 
-## 适用场景
-
-- 自录有声书，录音中包含口误、重读、废话、试读、停顿等需删除内容
-- 已有与音频对应的正确原文文本
-- 希望半自动机切 + 网页人工校正，而非纯手工波形剪辑
-- 个人本地使用，非多用户 SaaS
-
-## 输入与输出
-
-| 类型 | 内容 |
-|------|------|
-| **输入** | 原始音频、对应原文文本 |
-| **中间产物** | transcript、alignment、llm_cut_decision、cut_plan、user_review |
-| **输出** | 干净版音频、cut_plan.json、export_report.json、feedback_record |
-
-## 总体流水线
-
-```
-导入音频/原文 → 音频预处理 → ASR → 文本清洗 → 对齐
-    → LLM 机切建议 → 人工校正 → cut_plan → FFmpeg 导出 → 反馈优化
-```
-
-**重要**：大模型只做文本层判断，**不直接切音频**。切点来自 ASR 时间戳、对齐结果与用户人工调整。
-
 ## 当前状态
 
-- **Stage 1 — 素材导入与项目 Manifest**
-- **Round 01 — 素材导入与 Manifest**（已完成）
-- 已实现 manifest schema、ManifestService 与 `scripts/import_manifest.py` CLI
+**Stage 0–11 / Round 00–11 已全部完成（mock 流水线可端到端运行）**
 
-后续按 `rounds/` 目录逐轮推进（当前 Round 02 — ASR 基线）。
+详见 [PROJECT_STATE.md](PROJECT_STATE.md)。
 
-## 大文件与 Git 策略
+## 快速开始
 
-- 真实音频、导出音频、ASR/对齐/cut plan 等中间产物默认放在 `data/` 目录
-- **`data/` 真实内容不进入 Git**，仅保留 `.gitkeep`
-- 音频扩展名（wav/mp3/m4a 等）已在 `.gitignore` 中排除
-
-## 本轮验收
+### 1. 环境检查
 
 ```bash
-cd audiobook-cleaner-lab
-python scripts/check_repo.py
-python scripts/init_data_dirs.py
-python scripts/check_repo.py
+python3 scripts/check_environment.py   # Python / FFmpeg / Node / FastAPI
+python3 scripts/init_data_dirs.py
+python3 scripts/check_repo.py
 ```
 
-两次 `check_repo.py` 均应输出「仓库骨架检查通过」。
-
-## 素材导入（Round 01）
+### 2. 安装依赖
 
 ```bash
+python3 -m venv .venv && source .venv/bin/activate
+pip install fastapi uvicorn pydantic httpx
+
+cd apps/web && npm install && cd ../..
+```
+
+### 3. 一键启动（API + Web）
+
+```bash
+bash scripts/start_local.sh
+```
+
+- API: http://127.0.0.1:8000
+- Review 页: http://127.0.0.1:5173/?project_id=book_001&chapter_id=chapter_001
+
+### 4. Mock 单章全流程（CLI）
+
+```bash
+# 导入（需本地放置 wav + txt，或使用测试目录）
 python3 scripts/import_manifest.py create-project --project-id book_001 --title "示例有声书"
 python3 scripts/import_manifest.py add-chapter \
   --project-id book_001 --chapter-id chapter_001 --title "第一章" \
   --audio data/raw_audio/book_001/chapter_001.wav \
   --text data/source_text/book_001/chapter_001.txt
+
+python3 scripts/run_asr.py --project-id book_001 --chapter-id chapter_001
+python3 scripts/run_normalize.py --project-id book_001 --chapter-id chapter_001
+python3 scripts/run_align.py --project-id book_001 --chapter-id chapter_001
+python3 scripts/run_llm_cut.py --project-id book_001 --chapter-id chapter_001
+# Review 在 Web 完成，或批处理自动采纳 mock 建议：
+python3 scripts/batch_process.py --project-id book_001 --auto-review --skip-export
+python3 scripts/run_export.py --project-id book_001 --chapter-id chapter_001 --dry-run
+python3 scripts/run_feedback.py --project-id book_001 --chapter-id chapter_001
 ```
 
-详见 `rounds/round-01-import-manifest.md`。
+## CLI 脚本一览
+
+| 脚本 | 用途 |
+|------|------|
+| `import_manifest.py` | 创建项目 / 添加章节 |
+| `run_asr.py` | ASR mock / import |
+| `run_normalize.py` | 文本清洗 |
+| `run_align.py` | 原文与 ASR 对齐 |
+| `run_llm_cut.py` | LLM 机切建议（mock） |
+| `run_api.py` | 启动 FastAPI |
+| `run_export.py` | FFmpeg 导出（`--dry-run`） |
+| `run_feedback.py` | 反馈分析 |
+| `batch_process.py` | 多章节批处理 |
+| `check_environment.py` | 环境检查 |
+| `start_local.sh` | 一键启动 API + Web |
+
+## 大文件与 Git 策略
+
+- 真实音频、中间产物放在 `data/` 目录
+- **`data/` 真实内容不进入 Git**
+- 不调用真实付费 ASR/LLM API（当前为 mock Adapter）
 
 ## 快速导航
 
@@ -77,17 +92,15 @@ python3 scripts/import_manifest.py add-chapter \
 | [PROJECT_STATE.md](PROJECT_STATE.md) | 当前进度 |
 | [docs/STAGE_ROADMAP.md](docs/STAGE_ROADMAP.md) | Stage 0–11 路线图 |
 | [docs/DATA_MODEL.md](docs/DATA_MODEL.md) | JSON 数据结构 |
-| [docs/governance/](docs/governance/) | 治理协议 |
 
-## 技术栈（规划）
+## 技术栈
 
-- 后端：Python、FastAPI、SQLite、FFmpeg、Pydantic
+- 后端：Python 3.10+、FastAPI、Pydantic、FFmpeg
 - 前端：React、Vite、TypeScript、wavesurfer.js
-- Round 00 仅占位，未安装完整依赖
+- 存储：本地 JSON + `data/` 目录（SQLite 后续可选）
 
-## 当前默认假设
+## 重要原则
 
-1. 中文文档为主，个人本地单用户使用
-2. ASR/LLM 均通过 Adapter 可替换
-3. 非破坏式编辑：原音频只读，切点存 JSON
-4. 优先半自动 + 人工校正，不追求首轮全自动
+1. **非破坏式编辑**：原音频只读，切点存 JSON
+2. **LLM 不直接切音频**：仅文本层机切建议
+3. **低置信不自动删**：`confidence < 0.75` 须人工确认
