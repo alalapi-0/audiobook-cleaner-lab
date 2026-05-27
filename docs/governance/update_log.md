@@ -1,5 +1,26 @@
 # 治理协议更新日志
 
+## Round 05 — 2026-05-27 — 大模型机切建议
+
+### 新增代码
+
+- `packages/llm_core/` — MockLlmAdapter、LlmCutService
+- `prompts/llm_cut_decision/system_mock.md`
+- `scripts/run_llm_cut.py`
+- `tests/test_llm_cut_decision.py`
+
+---
+
+## Round 04 — 2026-05-27 — 原文与 ASR 对齐
+
+### 新增代码
+
+- `packages/alignment_core/` — BaselineAligner、AlignmentService
+- `scripts/run_align.py`
+- `tests/test_alignment.py`
+
+---
+
 ## Round 03 — 2026-05-27 — 文本正则清洗
 
 ### 新增代码

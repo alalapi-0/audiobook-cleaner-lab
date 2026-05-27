@@ -4,15 +4,15 @@
 
 ## 当前 Stage
 
-**Stage 4 — 原文与 ASR 对齐**
+**Stage 5 — 大模型机切建议**
 
 ## 当前 Round
 
-**Round 04 — 对齐**（已完成，下一轮 Round 05）
+**Round 05 — LLM 机切建议**（已完成，下一轮 Round 06）
 
 ## 当前状态
 
-`对齐可用` — BaselineAligner、AlignmentService、run_align CLI 已实现。
+`LLM mock 可用` — MockLlmAdapter、LlmCutService、run_llm_cut CLI 已实现。
 
 ## 已完成内容
 
@@ -35,6 +35,9 @@
 - [x] BaselineAligner、AlignmentService（Round 04）
 - [x] `scripts/run_align.py` CLI
 - [x] `tests/test_alignment.py`（3 项测试）
+- [x] MockLlmAdapter、LlmCutService（Round 05）
+- [x] `scripts/run_llm_cut.py` CLI
+- [x] `tests/test_llm_cut_decision.py`（4 项测试）
 
 ## 未完成内容
 
@@ -42,7 +45,7 @@
 - [x] ASR mock 与 transcript（Round 02）
 - [x] 文本清洗 normalizer（Round 03）
 - [x] 对齐 alignment（Round 04）
-- [ ] LLM 机切建议（Round 05）
+- [x] LLM 机切建议（Round 05）
 - [ ] Review 网页 MVP（Round 06）
 - [ ] 波形编辑器（Round 07）
 - [ ] FFmpeg 导出（Round 08）
@@ -50,9 +53,9 @@
 - [ ] 批处理（Round 10）
 - [ ] 本地一键启动（Round 11）
 
-## 下一轮目标（Round 05）
+## 下一轮目标（Round 06）
 
-实现 MockLlmAdapter 与 llm_cut_decision.json 生成。
+Review UI MVP：Vite + React 三栏布局，保存 user_review 与 cut_plan。
 
 ## 当前风险
 
@@ -82,6 +85,7 @@
 
 | 日期 | Round | 摘要 |
 |------|-------|------|
+| 2026-05-27 | Round 04 | BaselineAligner、AlignmentService、run_align CLI |
 | 2026-05-27 | Round 03 | source/asr normalizer、filler_detector、run_normalize CLI |
 | 2026-05-27 | Round 02 | MockAsrAdapter、ImportTranscriptAdapter、run_asr CLI |
 | 2026-05-27 | Round 01 | manifest schema、ManifestService、import_manifest CLI、单元测试 |

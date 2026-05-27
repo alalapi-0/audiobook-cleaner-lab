@@ -1,5 +1,7 @@
 # Round 05 — 大模型机切建议
 
+**状态：已完成（2026-05-27）**
+
 ## Round 目标
 
 实现 `LLM_CUT_DECISION_PROTOCOL` 与 `MockLlmAdapter`，输出 `llm_cut_decision.json`。

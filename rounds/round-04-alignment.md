@@ -30,6 +30,19 @@ Round 03 normalized 文本可用。
 
 - 不调用 LLM
 
+## 完成记录
+
+- [x] `packages/alignment_core/aligner.py` — BaselineAligner
+- [x] `packages/alignment_core/service.py` — AlignmentService
+- [x] `scripts/run_align.py`
+- [x] `tests/test_alignment.py` — 3 项测试
+
+## 验收结果
+
+```bash
+python3 -m unittest tests.test_alignment -v  # 3 tests OK
+```
+
 ## 下一轮衔接
 
 Round 05：LLM 机切建议
