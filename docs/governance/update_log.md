@@ -1,5 +1,42 @@
 # 治理协议更新日志
 
+## Round 08 — 2026-05-27 — FFmpeg 导出
+
+### 新增代码
+
+- `packages/audio_core/ffmpeg_exporter.py`
+- `packages/audio_core/export_service.py`
+- `scripts/run_export.py`
+- `tests/test_ffmpeg_export.py`
+
+---
+
+## Round 07 — 2026-05-27 — 波形编辑器
+
+### 新增代码
+
+- `apps/web/src/components/WaveformEditor.tsx`
+- `apps/api/routes/audio.py`
+- cut-plan GET/PUT API
+
+---
+
+## Round 06 — 2026-05-27 — Review UI MVP
+
+### 新增代码
+
+- `apps/api/services/review_service.py`
+- `apps/api/routes/review.py`
+- `apps/web/` — React Review 三栏 MVP
+- `scripts/run_api.py`
+- `tests/test_review_api.py`
+
+### 依赖变更
+
+- `pyproject.toml` 新增 fastapi、uvicorn、pydantic
+
+---
+
 ## Round 05 — 2026-05-27 — 大模型机切建议
 
 ### 新增代码

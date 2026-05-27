@@ -1,5 +1,7 @@
 # Round 08 — FFmpeg 非破坏式导出
 
+**状态：已完成（2026-05-27）**
+
 ## Round 目标
 
 根据 `cut_plan.json` dry-run 与正式导出干净音频，生成 `export_report.json`。
@@ -28,6 +30,19 @@ Round 07 cut_plan 可编辑；本地安装 FFmpeg。
 ## 不做什么
 
 - 不批处理多章（Round 10）
+
+## 完成记录
+
+- [x] `packages/audio_core/ffmpeg_exporter.py`
+- [x] `packages/audio_core/export_service.py`
+- [x] `scripts/run_export.py` — 支持 `--dry-run`
+- [x] `tests/test_ffmpeg_export.py`
+
+## 验收结果
+
+```bash
+python3 -m unittest tests.test_ffmpeg_export -v
+```
 
 ## 下一轮衔接
 
