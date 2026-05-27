@@ -1,0 +1,100 @@
+# AGENTS.md — AI Agent 工作规范
+
+本文档面向后续在本仓库中工作的 AI Agent（Cursor、Codex、Claude Code 等）。
+
+## Agent 工作前读取顺序
+
+按优先级依次阅读，**不要无脑全量读取整个仓库**：
+
+1. [README.md](README.md) — 项目目标与当前状态
+2. [AGENTS.md](AGENTS.md) — 本文档
+3. [PROJECT_STATE.md](PROJECT_STATE.md) — 当前 Stage/Round 与风险
+4. [docs/governance/repo_protocol_standard.yaml](docs/governance/repo_protocol_standard.yaml) — 治理协议
+5. [docs/governance/agent_reading_protocol.md](docs/governance/agent_reading_protocol.md) — 阅读策略
+6. [docs/STAGE_ROADMAP.md](docs/STAGE_ROADMAP.md) — 长期路线图
+7. **当前 round 文件** — `rounds/round-XX-*.md`
+8. 与本轮任务相关的设计文档（见 round 文件中的引用）
+9. 与本轮任务相关的 `packages/` 或 `apps/` 代码
+
+## 禁止事项
+
+- **禁止**读取或提交 `.env`、API Key、Token、密码
+- **禁止**把真实音频、真实小说文本提交到 Git
+- **禁止**在本轮未授权范围内调用真实付费 ASR/LLM API
+- **禁止**处理用户真实素材（除非用户在本轮明确提供路径并授权）
+- **禁止**删除 `data/` 中用户已有的真实文件
+- **禁止**让大模型直接切音频（仅允许文本层机切建议）
+- **禁止**覆盖原始音频文件
+- **禁止**未经用户明确要求就 `git push`
+- **禁止**无脑全量扫描 `data/`、`.git/`、`node_modules/` 等大目录
+
+## 每轮推进规则
+
+每一轮必须明确：
+
+- 本轮目标、产物、不做什么
+- 验收命令或验收方式
+- 下一轮入口
+
+每轮完成后**必须更新**：
+
+- [PROJECT_STATE.md](PROJECT_STATE.md)
+- [docs/governance/update_log.md](docs/governance/update_log.md)
+- 对应 `rounds/round-XX-*.md`（标记完成状态）
+- 若治理规则变更：同步 [docs/governance/repo_protocol_standard.yaml](docs/governance/repo_protocol_standard.yaml)
+
+## 如何处理 data 目录
+
+- `data/` 是本地工作区，真实内容**不进 Git**
+- 可用 `python scripts/init_data_dirs.py` 初始化子目录
+- Agent 只读写 schema 示例路径，不假设用户素材已存在
+- 扫描时用 glob 定位具体 JSON，不要 `read` 整个 data 树
+
+## 如何处理用户真实素材
+
+- 默认不访问、不复制、不上传
+- 若用户在本轮提供路径，仅读取本轮任务所需的最小文件
+- 不得在仓库中生成或提交真实音频副本
+
+## 如何处理既有协议文件
+
+- 权威协议位于 `docs/governance/repo_protocol_standard.yaml`
+- 参考来源：`novel-continuation-agent/governance/repo_protocol_standard.yaml`
+- 冲突时以**当前 Round Prompt** 为准
+- 协议变更须写入 `update_log.md`
+
+## 如何避免无脑全量读取
+
+1. 先读固定入口文件（见上方读取顺序前 7 项）
+2. 用 grep/glob 定位相关文件
+3. 大文件（>1MB）先查路径与标题，再 targeted read
+4. 跳过 `.git/`、`node_modules/`、`data/**` 二进制、`__pycache__/`
+5. 不确定时写 TODO，**不要乱实现**
+
+## 如何在不确定时行动
+
+- 在文档或代码中标注「当前默认假设」
+- 在 round 文件或 PROJECT_STATE 中记录 open question
+- 不擅自扩大 Round 范围
+
+## 每轮最终报告格式
+
+完成一轮后，用中文汇报：
+
+1. 读取并参考了哪些文件
+2. 本轮做了什么
+3. 创建/修改了哪些文件
+4. 本轮没有做什么
+5. 验收命令与结果
+6. 当前仓库状态
+7. 下一轮建议
+8. 风险或 TODO
+
+## 验收脚本
+
+```bash
+python scripts/check_repo.py      # 仓库骨架检查
+python scripts/init_data_dirs.py  # 初始化 data 子目录（首次或重置结构时）
+```
+
+业务 Round 完成后还应运行该 Round 文档中声明的专项测试。

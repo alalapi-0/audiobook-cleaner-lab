@@ -1,0 +1,43 @@
+# 环境变量与密钥
+.env
+.env.*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node.js
+node_modules/
+dist/
+build/
+
+# 系统文件
+.DS_Store
+
+# data 目录：允许 .gitkeep，排除真实内容
+data/**
+!data/
+!data/.gitkeep
+!data/**/
+!data/**/.gitkeep
+
+# 音频与视频大文件
+*.wav
+*.mp3
+*.m4a
+*.flac
+*.aac
+*.ogg
+*.mp4
+*.mov
+
+# 数据库
+*.sqlite
+*.db
+
+# 临时与缓存
+logs/
+tmp/
+.cache/

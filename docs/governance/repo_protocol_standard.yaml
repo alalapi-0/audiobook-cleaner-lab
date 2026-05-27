@@ -1,0 +1,163 @@
+protocol:
+  name: audiobook_cleaner_lab_repo_protocol
+  version: "1.0.0"
+  status: active
+  purpose: "为 audiobook-cleaner-lab 提供 AI Agent 可读的仓库治理规范。"
+  last_updated: "2026-05-27"
+  reference_standard: "novel-continuation-agent/governance/repo_protocol_standard.yaml v0.2.2"
+
+project:
+  name: audiobook-cleaner-lab
+  display_name: "个人有声书音频清洗与文本对齐剪辑工具"
+  type: ai_audio_text_pipeline
+  language: zh-CN
+  repository_mode: monorepo
+  owner: user
+  primary_stack:
+    backend: "Python, FastAPI, SQLite, FFmpeg, Pydantic"
+    frontend: "React, Vite, TypeScript, wavesurfer.js"
+
+authority:
+  priority_order:
+    - docs/governance/repo_protocol_standard.yaml
+    - PROJECT_STATE.md
+    - docs/governance/file_role_map.yaml
+    - AGENTS.md
+    - README.md
+    - rounds/round-XX-*.md
+  conflict_resolution: "Round Prompt 与项目业务需求优先于 portable standard；变更须记录于 update_log.md。"
+
+naming_conventions:
+  directories:
+    apps: "可运行应用（api、web）"
+    packages: "可复用 Python 核心模块"
+    docs: "人类可读设计文档"
+    docs_governance: "docs/governance/ 机器+人类治理层"
+    rounds: "Round 推进说明，round-XX-name.md"
+    prompts: "LLM 与 Agent 提示词"
+    scripts: "验收与工具脚本"
+    data: "本地工作区，真实内容不进 Git"
+    tests: "自动化测试"
+  round_names:
+    machine_format: "round-XX-name.md"
+    human_format: "Round XX"
+  yaml_fields:
+    style: snake_case
+
+required_root_files:
+  - README.md
+  - AGENTS.md
+  - PROJECT_STATE.md
+  - .gitignore
+  - pyproject.toml
+  - package.json
+
+required_directories:
+  - apps/api
+  - apps/web
+  - packages/audio_core
+  - packages/asr_core
+  - packages/text_core
+  - packages/alignment_core
+  - packages/llm_core
+  - packages/feedback_core
+  - docs
+  - docs/governance
+  - rounds
+  - prompts
+  - scripts
+  - data
+  - tests
+
+file_roles:
+  human_entry: README.md
+  agent_entry: AGENTS.md
+  machine_state: PROJECT_STATE.md
+  stage_roadmap: docs/STAGE_ROADMAP.md
+  data_model: docs/DATA_MODEL.md
+  llm_boundary: docs/LLM_CUT_DECISION_PROTOCOL.md
+  round_specs: rounds/
+
+agent_reading_order:
+  - README.md
+  - AGENTS.md
+  - PROJECT_STATE.md
+  - docs/governance/repo_protocol_standard.yaml
+  - docs/governance/agent_reading_protocol.md
+  - docs/STAGE_ROADMAP.md
+  - rounds/round-XX-*.md
+  - task_related_docs
+  - task_related_code
+
+search_first_policy: "使用 glob/grep 定位文件，禁止无脑全量读取 data/ 与 node_modules/。"
+
+forbidden_scan_paths:
+  - .git/
+  - node_modules/
+  - __pycache__/
+  - .venv/
+  - venv/
+  - data/raw_audio/
+  - data/exports/
+  - logs/
+  - tmp/
+
+round_update_rules:
+  after_each_round:
+    - PROJECT_STATE.md
+    - docs/governance/update_log.md
+    - rounds/round-XX-*.md
+  when_governance_changes:
+    - docs/governance/repo_protocol_standard.yaml
+    - docs/governance/file_role_map.yaml
+    - AGENTS.md
+
+forbidden_actions:
+  - "读取或提交 .env 与 API Key"
+  - "将真实音频或用户文本提交 Git"
+  - "Round 未授权时调用真实 ASR/LLM API"
+  - "大模型直接切音频或覆盖原文件"
+  - "删除用户 data/ 真实素材"
+  - "未经用户要求 git push"
+
+data_safety_rules:
+  - "原始音频只读，剪辑存 JSON"
+  - "data/** 真实内容被 .gitignore 排除"
+  - "仅 .gitkeep 可进 Git"
+  - "不处理、不上传用户真实素材除非本轮明确授权"
+
+large_file_rules:
+  gitignore_audio:
+    - "*.wav"
+    - "*.mp3"
+    - "*.m4a"
+    - "*.flac"
+  data_pattern: "data/** with !data/.gitkeep exceptions"
+
+state_update_rules:
+  current_stage_field: PROJECT_STATE.md
+  current_round_field: PROJECT_STATE.md
+  update_on_round_complete: true
+
+protocol_update_rules:
+  log_location: docs/governance/update_log.md
+  sync_files:
+    - AGENTS.md
+    - docs/governance/file_role_map.yaml
+
+acceptance_rules:
+  round_00:
+    - "python scripts/check_repo.py"
+    - "python scripts/init_data_dirs.py"
+    - "python scripts/check_repo.py"
+  require_check_scripts: true
+
+project_specific_rules:
+  llm_boundary: "LLM 仅输出 llm_cut_decision.json，不执行 FFmpeg"
+  asr_adapter: "ASR 可替换，Round 02 起 mock"
+  non_destructive_edit: "cut_plan.json 为导出唯一权威"
+
+current_default_assumptions:
+  - "中文有声书，个人本地单用户"
+  - "半自动 + 人工 Review，非首轮全自动"
+  - "SQLite 存元数据，JSON 存流水线产物"

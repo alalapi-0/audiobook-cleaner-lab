@@ -1,0 +1,123 @@
+# 文件职责映射 — audiobook-cleaner-lab
+
+files:
+  README.md:
+    role: human_entry
+    description: "项目入口：目标、流水线、验收、导航"
+    update_when: "用户可见结构或 Round 状态变化"
+
+  AGENTS.md:
+    role: agent_instruction
+    description: "AI Agent 阅读顺序、禁止事项、报告格式"
+    update_when: "Agent 规则或验收命令变化"
+
+  PROJECT_STATE.md:
+    role: machine_human_state
+    description: "当前 Stage/Round、完成项、风险、默认假设"
+    update_when: "每轮结束"
+
+  pyproject.toml:
+    role: python_project_config
+    description: "Python 包元数据与依赖"
+    update_when: "引入新 Python 依赖"
+
+  package.json:
+    role: frontend_project_config
+    description: "前端占位，Round 06 起完善"
+    update_when: "前端依赖或脚本变化"
+
+  .gitignore:
+    role: git_exclusion_rules
+    description: "排除 data 真实内容、音频、密钥、缓存"
+    update_when: "新增需排除的大文件类型"
+
+directories:
+  apps/api:
+    role: backend_application
+    description: "FastAPI 后端，章节流水线 API"
+    owner: backend
+
+  apps/web:
+    role: frontend_application
+    description: "Review 与波形编辑 UI"
+    owner: frontend
+
+  packages/audio_core:
+    role: library
+    description: "音频预处理、FFmpeg 导出"
+
+  packages/asr_core:
+    role: library
+    description: "ASR Adapter"
+
+  packages/text_core:
+    role: library
+    description: "文本清洗与 filler 候选"
+
+  packages/alignment_core:
+    role: library
+    description: "原文与 ASR 对齐"
+
+  packages/llm_core:
+    role: library
+    description: "LLM 机切建议 Adapter（不直接切音频）"
+
+  packages/feedback_core:
+    role: library
+    description: "用户修正反馈与统计"
+
+  docs/:
+    role: design_documentation
+    description: "流水线、数据模型、策略设计"
+
+  docs/governance/:
+    role: governance
+    description: "协议、阅读顺序、变更日志"
+
+  rounds/:
+    role: round_specifications
+    description: "Round 00–11 任务与验收"
+
+  prompts/:
+    role: prompt_library
+    description: "系统提示、Round 提示、LLM 机切 prompt"
+
+  scripts/:
+    role: utility_scripts
+    description: "check_repo、init_data_dirs、后续启动脚本"
+
+  data/:
+    role: local_workspace
+    description: "本地音频与 JSON 产物，不提交真实内容"
+    git_policy: "仅 .gitkeep"
+
+  tests/:
+    role: test_code
+    description: "单元与集成测试"
+
+docs:
+  docs/PROJECT_VISION.md:
+    role: vision
+  docs/PIPELINE_DESIGN.md:
+    role: architecture
+  docs/STAGE_ROADMAP.md:
+    role: roadmap
+  docs/DATA_MODEL.md:
+    role: schema
+  docs/LLM_CUT_DECISION_PROTOCOL.md:
+    role: llm_boundary
+  docs/governance/repo_protocol_standard.yaml:
+    role: cross_repo_standard_adapted
+
+scripts:
+  scripts/check_repo.py:
+    role: validation
+    description: "Round 00+ 仓库骨架检查"
+  scripts/init_data_dirs.py:
+    role: setup
+    description: "初始化 data 子目录"
+
+generated_or_runtime:
+  data/transcripts/: "ASR 产物，本地"
+  data/cut_plans/: "切点 JSON，本地"
+  data/exports/: "导出音频，本地"
