@@ -1,11 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
 import {
+  audioServeUrl,
+  fetchCutPlan,
   fetchReviewData,
   saveReview,
+  updateCutPlan,
+  type CutPlan,
   type ReviewData,
   type ReviewSegment,
   type UserDecision,
 } from "../api/client";
+import WaveformEditor, { type DeleteRange } from "../components/WaveformEditor";
 
 interface Props {
   projectId: string;
@@ -22,6 +27,19 @@ export default function ReviewPage({ projectId, chapterId }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [saveMsg, setSaveMsg] = useState<string | null>(null);
+  const [cutPlan, setCutPlan] = useState<CutPlan | null>(null);
+  const [deleteRanges, setDeleteRanges] = useState<DeleteRange[]>([]);
+
+  const loadCutPlan = useCallback(async () => {
+    try {
+      const cp = await fetchCutPlan(projectId, chapterId);
+      setCutPlan(cp);
+      setDeleteRanges(cp.delete_ranges ?? []);
+    } catch {
+      setCutPlan(null);
+      setDeleteRanges([]);
+    }
+  }, [projectId, chapterId]);
 
   useEffect(() => {
     setLoading(true);
@@ -41,7 +59,8 @@ export default function ReviewPage({ projectId, chapterId }: Props) {
       })
       .catch((e) => setError(String(e)))
       .finally(() => setLoading(false));
-  }, [projectId, chapterId]);
+    loadCutPlan();
+  }, [projectId, chapterId, loadCutPlan]);
 
   const selected: ReviewSegment | undefined = data?.segments.find(
     (s) => s.segment_id === selectedId,
@@ -63,8 +82,21 @@ export default function ReviewPage({ projectId, chapterId }: Props) {
       setSaveMsg(
         `已保存 cut_plan（delete: ${result.delete_count}, keep: ${result.keep_count}）`,
       );
+      await loadCutPlan();
     } catch (e) {
       setSaveMsg(`保存失败: ${e}`);
+    }
+  };
+
+  const handleSaveCutPlan = async () => {
+    try {
+      await updateCutPlan(projectId, chapterId, {
+        delete_ranges: deleteRanges,
+        keep_ranges: cutPlan?.keep_ranges ?? [],
+      });
+      setSaveMsg("cut_plan 已更新（波形微调）");
+    } catch (e) {
+      setSaveMsg(`cut_plan 保存失败: ${e}`);
     }
   };
 
@@ -174,9 +206,18 @@ export default function ReviewPage({ projectId, chapterId }: Props) {
         </section>
       </div>
 
-      <footer className="review-footer">
-        <span>音频: {data.source_audio}</span>
-        <span>选中: {selectedId ?? "—"}</span>
+      <footer className="review-footer waveform-section">
+        <WaveformEditor
+          audioUrl={audioServeUrl(data.source_audio)}
+          deleteRanges={deleteRanges}
+          onRangesChange={setDeleteRanges}
+          selectedSegmentStart={selected?.start}
+        />
+        <div className="waveform-actions">
+          <button type="button" className="btn primary" onClick={handleSaveCutPlan}>
+            保存波形 cut_plan 微调
+          </button>
+        </div>
       </footer>
     </div>
   );

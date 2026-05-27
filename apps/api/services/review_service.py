@@ -206,3 +206,24 @@ class ReviewService:
             "delete_count": len(delete_ranges),
             "keep_count": len(keep_ranges),
         }
+
+    def get_cut_plan(self, project_id: str, chapter_id: str) -> dict[str, Any]:
+        """读取 cut_plan.json。"""
+        chapter = self.manifest_service.load_chapter(project_id, chapter_id)
+        path = self._resolve_path(chapter.artifacts.cut_plan)
+        if not path.is_file():
+            raise FileNotFoundError(f"cut_plan 不存在: {chapter.artifacts.cut_plan}")
+        return self._read_json(path)
+
+    def update_cut_plan(
+        self,
+        project_id: str,
+        chapter_id: str,
+        cut_plan: dict[str, Any],
+    ) -> dict[str, Any]:
+        """更新 cut_plan（波形拖动微调后保存）。"""
+        chapter = self.manifest_service.load_chapter(project_id, chapter_id)
+        cut_plan["chapter_id"] = chapter_id
+        cut_plan["updated_at"] = datetime.now().replace(microsecond=0).isoformat()
+        self._write_json(chapter.artifacts.cut_plan, cut_plan)
+        return {"cut_plan_path": chapter.artifacts.cut_plan}

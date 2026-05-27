@@ -1,5 +1,7 @@
 # Round 07 — 波形时间轴编辑器
 
+**状态：已完成（2026-05-27）**
+
 ## Round 目标
 
 接入 wavesurfer.js，显示删除/保留/不确定区间，支持拖动切点。
@@ -26,6 +28,13 @@ Round 06 Review MVP 可用。
 ## 不做什么
 
 - 不多轨混音
+
+## 完成记录
+
+- [x] `apps/web/src/components/WaveformEditor.tsx` — wavesurfer.js + Regions
+- [x] cut-plan GET/PUT API
+- [x] 音频只读服务 `/api/audio/{path}`
+- [x] Review 页底栏波形与拖动保存
 
 ## 下一轮衔接
 

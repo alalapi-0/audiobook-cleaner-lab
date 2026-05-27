@@ -38,6 +38,19 @@ export interface UserDecision {
   note?: string;
 }
 
+export interface CutPlan {
+  chapter_id: string;
+  source_audio: string;
+  delete_ranges: Array<{
+    range_id: string;
+    start: number;
+    end: number;
+    reason?: string;
+    confirmed_by_user?: boolean;
+  }>;
+  keep_ranges: Array<Record<string, unknown>>;
+}
+
 const API_BASE = "/api";
 
 export async function fetchReviewData(
@@ -70,4 +83,44 @@ export async function saveReview(
     throw new Error(await res.text());
   }
   return res.json();
+}
+
+export async function fetchCutPlan(
+  projectId: string,
+  chapterId: string,
+): Promise<CutPlan> {
+  const res = await fetch(
+    `${API_BASE}/projects/${projectId}/chapters/${chapterId}/cut-plan`,
+  );
+  if (!res.ok) {
+    throw new Error(await res.text());
+  }
+  return res.json();
+}
+
+export async function updateCutPlan(
+  projectId: string,
+  chapterId: string,
+  cutPlan: Pick<CutPlan, "delete_ranges" | "keep_ranges">,
+): Promise<{ cut_plan_path: string }> {
+  const res = await fetch(
+    `${API_BASE}/projects/${projectId}/chapters/${chapterId}/cut-plan`,
+    {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        delete_ranges: cutPlan.delete_ranges,
+        keep_ranges: cutPlan.keep_ranges,
+        version: 2,
+      }),
+    },
+  );
+  if (!res.ok) {
+    throw new Error(await res.text());
+  }
+  return res.json();
+}
+
+export function audioServeUrl(sourceAudioPath: string): string {
+  return `${API_BASE}/audio/${sourceAudioPath}`;
 }

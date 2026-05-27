@@ -11,6 +11,7 @@ try:
     from fastapi.middleware.cors import CORSMiddleware
 
     from apps.api.routes.review import router as review_router
+    from apps.api.routes.audio import router as audio_router
 
     app = FastAPI(
         title="audiobook-cleaner-lab API",
@@ -25,6 +26,7 @@ try:
         allow_headers=["*"],
     )
     app.include_router(review_router)
+    app.include_router(audio_router)
 
 except ImportError:
     app = None  # type: ignore[assignment]

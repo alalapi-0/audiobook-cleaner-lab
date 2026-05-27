@@ -204,8 +204,37 @@ body {
   padding: 8px;
   font-size: 0.8rem;
   color: #666;
+}
+
+.waveform-section {
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  padding: 12px;
+}
+
+.waveform-container {
+  margin-top: 8px;
+}
+
+.waveform-toolbar {
   display: flex;
-  gap: 24px;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.waveform-legend {
+  font-size: 0.75rem;
+  margin-left: auto;
+}
+
+.legend-delete {
+  color: #c62828;
+}
+
+.waveform-actions {
+  margin-top: 8px;
 }
 
 .status.error {
