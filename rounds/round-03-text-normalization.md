@@ -30,6 +30,21 @@ Round 02 transcript 可用；章节原文路径已登记。
 
 - 不做 alignment
 
+## 完成记录
+
+- [x] `packages/text_core/normalizers.py`
+- [x] `packages/text_core/filler_detector.py`
+- [x] `packages/text_core/service.py`
+- [x] `config/text_normalization.example.yaml`
+- [x] `scripts/run_normalize.py`
+- [x] `tests/test_text_normalization.py` — 7 项测试
+
+## 验收结果
+
+```bash
+python3 -m unittest tests.test_text_normalization -v  # 7 tests OK
+```
+
 ## 下一轮衔接
 
 Round 04：alignment.json

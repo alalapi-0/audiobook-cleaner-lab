@@ -1,5 +1,7 @@
 # Round 04 — 原文与 ASR 对齐
 
+**状态：已完成（2026-05-27）**
+
 ## Round 目标
 
 生成 `alignment.json`，标注 matched / extra_candidate / missing / repeated / uncertain / low_similarity。
