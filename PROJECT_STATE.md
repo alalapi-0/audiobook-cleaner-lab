@@ -8,11 +8,11 @@
 
 ## 当前 Round
 
-**Round 12 — Agent 自主验证门禁**（进行中）
+**Round 13 — Autonomous Real API Round 1**（硬阻塞：缺少 LLM API Key）
 
 ## 当前状态
 
-`端到端 mock 流水线可运行` — Round 00–11 全部完成；Round 12 补充 Agent MCP 配置、agent_gate 门禁与浏览器验证闭环。
+`真实 LLM Adapter 已接入骨架` — OpenAiCompatibleAdapter + real_api_check 就绪；待 `.env` 配置 Key 后可发起真实调用。
 
 ## 已完成内容
 
@@ -29,14 +29,11 @@
 - [x] Round 10 — 批处理
 - [x] Round 11 — 环境检查与一键启动
 - [x] Round 12 — Agent MCP / agent_gate / 浏览器验证门禁
+- [ ] Round 13 R1 — 真实 LLM API（硬阻塞：无 API Key，Adapter 骨架已就绪）
 
 ## 下一轮目标
 
-进入维护迭代。新需求开 Stage 12+ 或新 Round：
-- 真实 ASR Adapter（Whisper / faster-whisper）
-- 真实 LLM Adapter（OpenAI 兼容 API）
-- SQLite 持久化
-- docker-compose
+配置 `.env` 中 `LLM_API_KEY` 后重跑 `scripts/real_api_check.py`，完成 Round 13 R2 真实样本生成与 Review UI 验证。
 
 ## 当前风险
 

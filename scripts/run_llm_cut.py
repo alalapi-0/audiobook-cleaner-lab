@@ -12,7 +12,16 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from packages.llm_core.adapters.openai_compatible import OpenAiCompatibleAdapter  # noqa: E402
 from packages.llm_core.service import LlmCutService  # noqa: E402
+
+
+def _resolve_adapter(engine: str):
+    if engine == "mock":
+        return None
+    if engine in ("openai", "openai_compatible", "real"):
+        return OpenAiCompatibleAdapter()
+    raise ValueError(f"未知 engine: {engine}（可选 mock / openai）")
 
 
 def main() -> int:
@@ -20,11 +29,18 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="audiobook-cleaner-lab LLM 机切建议")
     parser.add_argument("--project-id", required=True)
     parser.add_argument("--chapter-id", required=True)
+    parser.add_argument(
+        "--engine",
+        default="mock",
+        choices=["mock", "openai", "openai_compatible", "real"],
+        help="LLM 引擎：mock（默认）或 openai（真实 API）",
+    )
     args = parser.parse_args()
 
     service = LlmCutService()
     try:
-        result = service.run_llm_cut(args.project_id, args.chapter_id)
+        adapter = _resolve_adapter(args.engine)
+        result = service.run_llm_cut(args.project_id, args.chapter_id, adapter=adapter)
     except (FileNotFoundError, ValueError) as exc:
         print(f"错误: {exc}", file=sys.stderr)
         return 1

@@ -1,5 +1,17 @@
 # 治理协议更新日志
 
+## Round 13 R1 — 2026-06-01 — Autonomous Real API（硬阻塞）
+
+- `packages/llm_core/adapters/openai_compatible.py` — OpenAI 兼容真实 LLM Adapter
+- `packages/llm_core/config.py` — .env / 环境变量加载
+- `scripts/real_api_check.py` — 3 样本真实 API 验证 + 报告
+- `prompts/llm_cut_decision/system_openai.md`
+- `.env.example`
+- `run_llm_cut.py --engine openai`
+- **硬阻塞**：无 LLM_API_KEY，0 次真实 API 调用
+
+---
+
 ## Round 12 — 2026-06-01 — Agent 自主验证门禁
 
 - `.cursor/mcp.json`（playwright / chrome-devtools / context7）
