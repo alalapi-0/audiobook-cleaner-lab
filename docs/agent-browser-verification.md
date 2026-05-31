@@ -1,0 +1,91 @@
+# Agent 浏览器调试与验证闭环
+
+本文档说明本仓库为 Cursor Agent 配置的浏览器调试、MCP 工具与自动化验证入口。
+
+## 新增 MCP 服务器
+
+以下 MCP 已写入 `.cursor/mcp.json`（合并模式，不覆盖已有同名配置）：
+
+| MCP | 用途 |
+|-----|------|
+| **playwright** | 浏览器自动化：打开页面、点击、输入、截图、基础交互验证 |
+| **chrome-devtools** | 深层 DevTools 调试：console、network、performance、DOM 检查 |
+| **context7** | 查询最新库/框架文档（prompt 中可写 `use context7`） |
+
+启动方式均为 `npx` stdio，**无需在仓库中写入 API Key**。
+
+## 在 Cursor 中确认 MCP 已启用
+
+1. **重启 Cursor**（修改 `.cursor/mcp.json` 后必须重启）
+2. 打开 **Cursor Settings → Tools & MCP**（或 **MCP**）
+3. 确认以下 server 状态为可用（绿色/已连接）：
+   - `playwright`
+   - `chrome-devtools`
+   - `context7`
+4. 若某 server 报错，查看 Output 面板中的 MCP 日志；常见原因是 Node 未安装或网络无法拉取 `npx` 包
+
+## Skill 与 Rule
+
+| 文件 | 作用 |
+|------|------|
+| `.cursor/skills/browser-debug-check/SKILL.md` | 浏览器级验证闭环技能（console/network/用户路径/验证报告） |
+| `.cursor/rules/verification-gate.mdc` | 全局规则：涉及前端/UI/API 的任务必须走验证门禁 |
+
+## 验证命令
+
+根目录 `package.json`：
+
+```bash
+npm run agent:check   # 组合 build + test（按项目现有 scripts 动态组合）
+npm run test          # Playwright smoke test（apps/web，自动启动 Vite dev server）
+npm run build         # 前端 TypeScript + Vite 构建
+```
+
+前端 Playwright 配置位于 `apps/web/playwright.config.ts`，smoke 测试位于 `apps/web/tests/smoke.spec.ts`。
+
+**Smoke test 说明：**
+
+- Playwright 会通过 `webServer` 自动启动 Vite dev server（`http://localhost:5173`；勿用 `127.0.0.1`，因 Vite 默认仅监听 `localhost`）
+- 未启动 FastAPI 后端时，`/api` 代理会返回 500；smoke 测试会过滤此类预期网络错误，仅断言页面壳与无 JS 运行时 error
+- 完整 API 集成验证需另行启动后端并配合 `/browser-debug-check` 技能
+
+## Prompt 示例
+
+**完整浏览器验证闭环：**
+
+```
+请调用 /browser-debug-check 技能完成本轮验证
+```
+
+**查最新框架文档：**
+
+```
+use context7 查询 Vite / React 最新文档，确认当前用法是否正确
+```
+
+**修改 Review 页后的典型流程：**
+
+```
+1. 启动 npm run dev
+2. 用 Playwright MCP 或 Chrome DevTools MCP 打开 http://127.0.0.1:5173
+3. 检查 console 与 network
+4. 运行 npm run agent:check
+5. 输出验证报告
+```
+
+## 安全注意事项
+
+- **不要**让 MCP 打开真实支付后台或生产管理后台
+- **不要**让 MCP 操作生产账号或真实用户数据
+- **不要**把 API Key、token、cookie、session 写入仓库或 MCP 配置
+- 测试文件删除/移动功能时，仅使用 `data/` 下的测试目录或 mock 数据
+- smoke test 仅访问本地 dev server，不访问外网生产环境
+
+## 相关文件清单
+
+- `.cursor/mcp.json`
+- `.cursor/skills/browser-debug-check/SKILL.md`
+- `.cursor/rules/verification-gate.mdc`
+- `apps/web/playwright.config.ts`
+- `apps/web/tests/smoke.spec.ts`
+- 根目录 `package.json` 中的 `agent:check` / `test` scripts
