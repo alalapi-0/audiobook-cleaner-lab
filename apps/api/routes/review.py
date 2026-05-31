@@ -26,6 +26,7 @@ except ImportError:  # Round 06 前兼容：未安装 FastAPI 时不阻断仓库
 if APIRouter is not None:
 
     from apps.api.services.review_service import ReviewService
+    from apps.api.services.manifest_service import ManifestError
 
     router = APIRouter(prefix="/api", tags=["review"])
     review_service = ReviewService()
@@ -60,7 +61,7 @@ if APIRouter is not None:
         """获取 Review 页面数据。"""
         try:
             return review_service.get_review_data(project_id, chapter_id)
-        except FileNotFoundError as exc:
+        except (FileNotFoundError, ManifestError) as exc:
             raise HTTPException(status_code=404, detail=str(exc)) from exc
 
     @router.get("/projects/{project_id}/chapters/{chapter_id}/cut-plan")
@@ -68,7 +69,7 @@ if APIRouter is not None:
         """获取 cut_plan。"""
         try:
             return review_service.get_cut_plan(project_id, chapter_id)
-        except FileNotFoundError as exc:
+        except (FileNotFoundError, ManifestError) as exc:
             raise HTTPException(status_code=404, detail=str(exc)) from exc
 
     @router.put("/projects/{project_id}/chapters/{chapter_id}/cut-plan")
@@ -106,7 +107,7 @@ if APIRouter is not None:
                 chapter_id,
                 [d.model_dump() for d in body.decisions],
             )
-        except FileNotFoundError as exc:
+        except (FileNotFoundError, ManifestError) as exc:
             raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 else:

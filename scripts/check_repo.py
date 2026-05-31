@@ -59,6 +59,8 @@ REQUIRED_FILES = [
     "docs/governance/update_log.md",
     "scripts/check_repo.py",
     "scripts/init_data_dirs.py",
+    "scripts/agent_gate.py",
+    "docs/agent-browser-verification.md",
 ]
 
 # packages 下每个模块必须有的文件

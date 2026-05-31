@@ -1,5 +1,18 @@
 # 治理协议更新日志
 
+## Round 12 — 2026-06-01 — Agent 自主验证门禁
+
+- `.cursor/mcp.json`（playwright / chrome-devtools / context7）
+- `.cursor/skills/browser-debug-check/SKILL.md`
+- `.cursor/rules/verification-gate.mdc`
+- `docs/agent-browser-verification.md`
+- `scripts/agent_gate.py`
+- `scripts/seed_demo_chapter.py`
+- Review API：`ManifestError` 返回 404 而非 500
+- Review UI：初始加载不再请求不存在的 cut_plan
+
+---
+
 ## Round 11 — 2026-05-27 — 本地一键启动
 
 - `scripts/check_environment.py`

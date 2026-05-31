@@ -8,11 +8,11 @@
 
 ## 当前 Round
 
-**Round 11 — 本地一键启动**（已完成）
+**Round 12 — Agent 自主验证门禁**（进行中）
 
 ## 当前状态
 
-`端到端 mock 流水线可运行` — Round 00–11 全部完成。用户可导入素材、跑 mock ASR/LLM、Web Review、波形微调、FFmpeg 导出与反馈分析。
+`端到端 mock 流水线可运行` — Round 00–11 全部完成；Round 12 补充 Agent MCP 配置、agent_gate 门禁与浏览器验证闭环。
 
 ## 已完成内容
 
@@ -28,6 +28,7 @@
 - [x] Round 09 — 反馈闭环
 - [x] Round 10 — 批处理
 - [x] Round 11 — 环境检查与一键启动
+- [x] Round 12 — Agent MCP / agent_gate / 浏览器验证门禁
 
 ## 下一轮目标
 
@@ -55,6 +56,7 @@
 
 | 日期 | Round | 摘要 |
 |------|-------|------|
+| 2026-06-01 | Round 12 | agent_gate、MCP/Skill/Rule、ManifestError→404、Review 初始 cut_plan UX |
 | 2026-05-27 | Round 11 | check_environment、start_local.sh、README 教程 |
 | 2026-05-27 | Round 10 | batch_process.py 多章节批处理 |
 | 2026-05-27 | Round 09 | FeedbackService、feedback_record |

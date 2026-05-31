@@ -33,9 +33,11 @@
 
 ## 验证命令
 
-根目录 `package.json`：
+根目录 `package.json` 与 `scripts/agent_gate.py`：
 
 ```bash
+python3 scripts/agent_gate.py   # 仓库骨架 + 环境 + compileall + npm run agent:check
+python3 scripts/seed_demo_chapter.py  # 本地 Review 演示数据（写入 data/，不进 Git）
 npm run agent:check   # 组合 build + test（按项目现有 scripts 动态组合）
 npm run test          # Playwright smoke test（apps/web，自动启动 Vite dev server）
 npm run build         # 前端 TypeScript + Vite 构建
@@ -88,4 +90,6 @@ use context7 查询 Vite / React 最新文档，确认当前用法是否正确
 - `.cursor/rules/verification-gate.mdc`
 - `apps/web/playwright.config.ts`
 - `apps/web/tests/smoke.spec.ts`
+- `scripts/agent_gate.py`
+- `scripts/seed_demo_chapter.py`
 - 根目录 `package.json` 中的 `agent:check` / `test` scripts

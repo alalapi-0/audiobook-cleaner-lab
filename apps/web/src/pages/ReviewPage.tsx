@@ -33,13 +33,35 @@ export default function ReviewPage({ projectId, chapterId }: Props) {
   const loadCutPlan = useCallback(async () => {
     try {
       const cp = await fetchCutPlan(projectId, chapterId);
+      if (!cp) {
+        return false;
+      }
       setCutPlan(cp);
       setDeleteRanges(cp.delete_ranges ?? []);
+      return true;
     } catch {
       setCutPlan(null);
       setDeleteRanges([]);
+      return false;
     }
   }, [projectId, chapterId]);
+
+  const buildInitialDeleteRanges = useCallback((segments: ReviewSegment[]): DeleteRange[] => {
+    return segments
+      .filter((s) => s.model_action === "delete" && s.suggested_cut)
+      .map((s, index) => {
+        const cut = s.suggested_cut!;
+        const pre = cut.pre_padding ?? 0.08;
+        const post = cut.post_padding ?? 0.12;
+        return {
+          range_id: `del_${String(index + 1).padStart(3, "0")}`,
+          start: Math.max(0, cut.start - pre),
+          end: cut.end + post,
+          reason: s.model_reason,
+          confirmed_by_user: false,
+        };
+      });
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -56,11 +78,11 @@ export default function ReviewPage({ projectId, chapterId }: Props) {
         if (d.segments.length > 0) {
           setSelectedId(d.segments[0].segment_id);
         }
+        setDeleteRanges(buildInitialDeleteRanges(d.segments));
       })
       .catch((e) => setError(String(e)))
       .finally(() => setLoading(false));
-    loadCutPlan();
-  }, [projectId, chapterId, loadCutPlan]);
+  }, [projectId, chapterId, buildInitialDeleteRanges]);
 
   const selected: ReviewSegment | undefined = data?.segments.find(
     (s) => s.segment_id === selectedId,

@@ -88,10 +88,13 @@ export async function saveReview(
 export async function fetchCutPlan(
   projectId: string,
   chapterId: string,
-): Promise<CutPlan> {
+): Promise<CutPlan | null> {
   const res = await fetch(
     `${API_BASE}/projects/${projectId}/chapters/${chapterId}/cut-plan`,
   );
+  if (res.status === 404) {
+    return null;
+  }
   if (!res.ok) {
     throw new Error(await res.text());
   }

@@ -7,6 +7,7 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+*.egg-info/
 
 # Node.js
 node_modules/
@@ -41,3 +42,6 @@ data/**
 logs/
 tmp/
 .cache/
+.playwright-mcp/
+apps/web/test-results/
+*.tsbuildinfo
