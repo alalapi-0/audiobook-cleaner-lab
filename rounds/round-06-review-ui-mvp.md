@@ -31,6 +31,33 @@ Round 05 llm_cut_decision 可用。
 
 - 不做波形拖动（Round 07）
 
+## 完成记录
+
+- [x] `apps/api/services/review_service.py`
+- [x] `apps/api/routes/review.py` — GET review-data / POST review
+- [x] `apps/api/main.py` — FastAPI + CORS
+- [x] `apps/web/` — Vite + React + TypeScript Review 三栏 MVP
+- [x] `scripts/run_api.py`
+- [x] `tests/test_review_api.py` — 3 项测试
+
+## 本地启动
+
+```bash
+# 后端
+python3 scripts/run_api.py   # 或 .venv/bin/python scripts/run_api.py
+
+# 前端（需 npm install）
+cd apps/web && npm install && npm run dev
+# 打开 http://localhost:5173/?project_id=book_001&chapter_id=chapter_001
+```
+
+## 验收结果
+
+```bash
+python3 -m unittest tests.test_review_api -v  # 3 tests OK（需 fastapi + httpx）
+python3 scripts/check_repo.py
+```
+
 ## 下一轮衔接
 
 Round 07：wavesurfer.js 波形编辑
