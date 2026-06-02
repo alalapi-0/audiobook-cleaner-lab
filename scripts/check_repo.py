@@ -60,6 +60,7 @@ REQUIRED_FILES = [
     "scripts/check_repo.py",
     "scripts/init_data_dirs.py",
     "scripts/agent_gate.py",
+    "scripts/auto_advance.py",
     "docs/agent-browser-verification.md",
 ]
 
@@ -87,6 +88,8 @@ ROUND_FILES = [
     "round-09-feedback-loop.md",
     "round-10-batch-processing.md",
     "round-11-local-runner.md",
+    "round-13-autonomous-real-api-r1.md",
+    "round-14-autonomous-dev-loop.md",
 ]
 
 # .gitignore 必须包含的关键规则片段
@@ -166,7 +169,7 @@ def main() -> int:
     print("\n✓ 所有关键目录存在")
     print("✓ 所有关键文档存在")
     print("✓ packages 模块骨架完整")
-    print("✓ rounds/round-00 到 round-11 齐全")
+    print("✓ rounds 关键 round 文件齐全")
     print("✓ docs/governance 治理文档齐全")
     print("✓ .gitignore 包含 data 与音频排除规则")
     print("\n仓库骨架检查通过")

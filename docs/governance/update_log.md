@@ -1,5 +1,15 @@
 # 治理协议更新日志
 
+## Round 14 — 2026-06-02 — Autonomous Dev Loop
+
+- `scripts/auto_advance.py` — 连续自动推进入口（seed + agent_gate）
+- `scripts/start_local.sh` — 启动前自动 seed 演示章节
+- `rounds/round-14-autonomous-dev-loop.md`
+- `package.json` — `agent:advance`
+- `scripts/check_repo.py` — 校验 round-13/14 与 auto_advance
+
+---
+
 ## Round 13 R1 — 2026-06-01 — Autonomous Real API（硬阻塞）
 
 - `packages/llm_core/adapters/openai_compatible.py` — OpenAI 兼容真实 LLM Adapter

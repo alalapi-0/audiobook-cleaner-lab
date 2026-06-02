@@ -4,15 +4,17 @@
 
 ## 当前 Stage
 
-**Stage 11 — 本地运行与使用体验（全部 Stage 0–11 已完成）**
+**Stage 12 — 连续自动推进与本地主链路巩固（Round 14 完成）**
 
 ## 当前 Round
 
-**Round 13 — Autonomous Real API Round 1**（硬阻塞：缺少 LLM API Key）
+**Round 14 — Autonomous Dev Loop**（已完成）
+
+**Round 13 R2 — 真实 LLM API**（待用户配置 Key，非硬阻塞整体 mock 链路）
 
 ## 当前状态
 
-`真实 LLM Adapter 已接入骨架` — OpenAiCompatibleAdapter + real_api_check 就绪；待 `.env` 配置 Key 后可发起真实调用。
+`mock 主链路可一键验收` — `auto_advance.py` + `start_local.sh` 自动 seed 演示章节；Review API/UI 可在无 API Key 时端到端验证。
 
 ## 已完成内容
 
@@ -29,11 +31,13 @@
 - [x] Round 10 — 批处理
 - [x] Round 11 — 环境检查与一键启动
 - [x] Round 12 — Agent MCP / agent_gate / 浏览器验证门禁
-- [ ] Round 13 R1 — 真实 LLM API（硬阻塞：无 API Key，Adapter 骨架已就绪）
+- [x] Round 13 R1 — 真实 LLM Adapter 骨架（无 Key 时跳过真实调用）
+- [x] Round 14 — auto_advance、start_local 自动 seed、check_repo 扩展
 
 ## 下一轮目标
 
-配置 `.env` 中 `LLM_API_KEY` 后重跑 `scripts/real_api_check.py`，完成 Round 13 R2 真实样本生成与 Review UI 验证。
+1. 用户配置 `.env` 中 `LLM_API_KEY` 后完成 Round 13 R2（`real_api_check.py --pipeline`）
+2. 可选：Playwright 冒烟测试启动 API fixture，消除 ECONNREFUSED 警告
 
 ## 当前风险
 
@@ -42,6 +46,7 @@
 | mock 与真实 ASR 差距 | 切点精度未知 | 接入真实 Adapter 后回归测试 |
 | 前端未 CI 构建 | npm 依赖本地安装 | README + check_environment |
 | 对齐算法简单 | 复杂口误场景 | LLM + 人工 Review |
+| 无 API Key | 真实 LLM 未调用 | mock 链路 + Round 13 报告 exit 2 |
 
 ## 用户需要准备的内容
 
@@ -53,6 +58,8 @@
 
 | 日期 | Round | 摘要 |
 |------|-------|------|
+| 2026-06-02 | Round 14 | auto_advance、start_local 自动 seed、agent:advance |
+| 2026-06-01 | Round 13 R1 | OpenAiCompatibleAdapter、real_api_check（无 Key 硬阻塞真实调用） |
 | 2026-06-01 | Round 12 | agent_gate、MCP/Skill/Rule、ManifestError→404、Review 初始 cut_plan UX |
 | 2026-05-27 | Round 11 | check_environment、start_local.sh、README 教程 |
 | 2026-05-27 | Round 10 | batch_process.py 多章节批处理 |
