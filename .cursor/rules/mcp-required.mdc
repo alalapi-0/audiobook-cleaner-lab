@@ -1,0 +1,45 @@
+---
+description: "Workspace MCP Servers 必需项与安全约束"
+alwaysApply: true
+---
+
+# Workspace MCP Servers（必需）
+
+当前仓库默认需要以下 5 个 Workspace MCP Servers：
+
+- **chrome-devtools**
+- **context7**
+- **filesystem**
+- **github**
+- **playwright**
+
+配置位于 [`.cursor/mcp.json`](../mcp.json)。修改后需 **重启 Cursor 或 Reload Window** 才能生效。
+
+## 启动前检查
+
+Agent 开始自动推进轮之前，必须：
+
+1. 确认上述 MCP 已在 Cursor Settings → MCP 中加载。
+2. 运行 `npm run check:mcp`（或 `node scripts/check_mcp_config.js`）验证配置格式与安全规则。
+
+## 使用规则
+
+| MCP | 要求 |
+|-----|------|
+| **chrome-devtools / playwright** | UI、审核台、浏览器交互、生成结果预览、发布流程等任务 **必须** 使用其一做真实浏览器检查（页面、console、network、核心流程） |
+| **context7** | 文档与依赖不确定时 **优先** 查询第三方库/框架文档 |
+| **filesystem** | 文件读写 **仅限** 当前项目目录（`${workspaceFolder}`）；不得授权 `/`、`~`、`C:\`、用户主目录或磁盘根目录 |
+| **github** | 操作前 **必须** `git status` 与 `git diff`；提交前确认无 token、API Key、cookie、无关大文件 |
+
+## MCP 不可用时
+
+- 在轮次报告中 **记录原因**，不要无意义反复安装。
+- 按 [docs/agent_skills/mcp_usage_skill.md](../../docs/agent_skills/mcp_usage_skill.md) 降级（如 `git`/`gh` CLI、内置读文件工具、`npm run test`）。
+- 缺少 GitHub token 时 **不阻断** 其他 MCP 配置与推进，除非 token 是当前任务唯一阻塞项。
+
+## 引用
+
+- MCP 配置：`.cursor/mcp.json`
+- 检查脚本：`scripts/check_mcp_config.js`
+- Agent 规范：[AGENTS.md](../../AGENTS.md)
+- 详细用法：[docs/agent_skills/mcp_usage_skill.md](../../docs/agent_skills/mcp_usage_skill.md)

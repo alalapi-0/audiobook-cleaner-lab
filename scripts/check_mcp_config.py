@@ -11,6 +11,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 MCP_PATH = ROOT / ".cursor" / "mcp.json"
 
+REQUIRED_SERVERS = (
+    "chrome-devtools",
+    "context7",
+    "filesystem",
+    "github",
+    "playwright",
+)
+
 # filesystem args 中视为危险的根路径（大小写不敏感匹配片段）
 DANGEROUS_PATH_FRAGMENTS = (
     "/",
@@ -48,11 +56,9 @@ def load_mcp_config() -> tuple[dict | None, list[str]]:
     return data, issues
 
 
-def check_playwright(servers: dict) -> list[str]:
-    """确认包含 playwright server。"""
-    if "playwright" not in servers:
-        return ["缺少 MCP server: playwright"]
-    return []
+def check_required_servers(servers: dict) -> list[str]:
+    """确认包含全部必需 MCP server。"""
+    return [f"缺少 MCP server: {name}" for name in REQUIRED_SERVERS if name not in servers]
 
 
 def check_filesystem_scope(servers: dict) -> list[str]:
@@ -125,17 +131,17 @@ def main() -> int:
         print("  ✗ mcpServers 无效")
         return 1
 
-    issues.extend(check_playwright(servers))
+    issues.extend(check_required_servers(servers))
     issues.extend(check_filesystem_scope(servers))
 
     summarize_servers(servers)
 
     optional = []
-    for name in ("filesystem", "github", "context7", "chrome-devtools"):
+    for name in REQUIRED_SERVERS:
         if name not in servers:
             optional.append(name)
     if optional:
-        print(f"\n提示: 未配置的可选/扩展 server: {', '.join(optional)}")
+        print(f"\n提示: 未配置的 server: {', '.join(optional)}")
 
     if issues:
         print("\n检查未通过:")

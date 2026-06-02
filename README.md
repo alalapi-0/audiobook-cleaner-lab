@@ -104,3 +104,25 @@ python3 scripts/run_feedback.py --project-id book_001 --chapter-id chapter_001
 1. **非破坏式编辑**：原音频只读，切点存 JSON
 2. **LLM 不直接切音频**：仅文本层机切建议
 3. **低置信不自动删**：`confidence < 0.75` 须人工确认
+
+## Workspace MCP Servers
+
+本仓库在 Cursor 中作为 **Workspace MCP Servers** 启用以下 5 个 MCP：
+
+| MCP | 用途 |
+|-----|------|
+| **chrome-devtools** | 浏览器调试、console、network |
+| **context7** | 第三方库/框架文档查询 |
+| **filesystem** | 当前项目目录内文件读写与检查 |
+| **github** | 仓库、提交、分支、issue、PR |
+| **playwright** | 浏览器自动化与 E2E 验收 |
+
+说明：
+
+1. [`.cursor/mcp.json`](.cursor/mcp.json) 是本项目的 Workspace MCP 配置。
+2. 修改配置后，Cursor 可能需要 **重启或 Reload Window** 才能识别。
+3. **GitHub MCP** 需通过环境变量（如 `GITHUB_TOKEN`）提供 token，**不允许**写进仓库。
+4. **filesystem MCP** 仅授权当前项目目录（`${workspaceFolder}`），不授权整盘或用户主目录。
+5. 运行 `npm run check:mcp` 可检查配置格式与安全规则。
+
+详见 [AGENTS.md](AGENTS.md) 与 [docs/agent_skills/mcp_usage_skill.md](docs/agent_skills/mcp_usage_skill.md)。

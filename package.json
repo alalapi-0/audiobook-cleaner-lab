@@ -9,7 +9,7 @@
     "preview": "cd apps/web && npm run preview",
     "test": "cd apps/web && npm run test",
     "agent:check": "npm run build && npm run test",
-    "check:mcp": "python3 scripts/check_mcp_config.py"
+    "check:mcp": "node scripts/check_mcp_config.js"
   },
   "engines": {
     "node": ">=18"
