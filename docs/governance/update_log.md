@@ -1,5 +1,13 @@
 # 治理协议更新日志
 
+## Round 15 — 2026-06-02 — Playwright API Fixture
+
+- `apps/web/playwright.config.ts` — 测试时自动启动 API + seed
+- `WaveformEditor.tsx` — 未 ready 禁用播放按钮
+- `rounds/round-15-playwright-api-fixture.md`
+
+---
+
 ## Round 14 — 2026-06-02 — Autonomous Dev Loop
 
 - `scripts/auto_advance.py` — 连续自动推进入口（seed + agent_gate）

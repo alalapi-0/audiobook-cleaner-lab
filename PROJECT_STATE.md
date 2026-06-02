@@ -8,7 +8,7 @@
 
 ## 当前 Round
 
-**Round 14 — Autonomous Dev Loop**（已完成）
+**Round 15 — Playwright API Fixture**（已完成）
 
 **Round 13 R2 — 真实 LLM API**（待用户配置 Key，非硬阻塞整体 mock 链路）
 
@@ -33,11 +33,11 @@
 - [x] Round 12 — Agent MCP / agent_gate / 浏览器验证门禁
 - [x] Round 13 R1 — 真实 LLM Adapter 骨架（无 Key 时跳过真实调用）
 - [x] Round 14 — auto_advance、start_local 自动 seed、check_repo 扩展
+- [x] Round 15 — Playwright 双 webServer + 波形按钮 ready 门禁
 
 ## 下一轮目标
 
-1. 用户配置 `.env` 中 `LLM_API_KEY` 后完成 Round 13 R2（`real_api_check.py --pipeline`）
-2. 可选：Playwright 冒烟测试启动 API fixture，消除 ECONNREFUSED 警告
+用户配置 `.env` 中 `LLM_API_KEY` 后完成 Round 13 R2（`real_api_check.py --pipeline`）
 
 ## 当前风险
 
@@ -58,6 +58,7 @@
 
 | 日期 | Round | 摘要 |
 |------|-------|------|
+| 2026-06-02 | Round 15 | Playwright API fixture、波形按钮 ready 门禁 |
 | 2026-06-02 | Round 14 | auto_advance、start_local 自动 seed、agent:advance |
 | 2026-06-01 | Round 13 R1 | OpenAiCompatibleAdapter、real_api_check（无 Key 硬阻塞真实调用） |
 | 2026-06-01 | Round 12 | agent_gate、MCP/Skill/Rule、ManifestError→404、Review 初始 cut_plan UX |

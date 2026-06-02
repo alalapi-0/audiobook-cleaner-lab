@@ -90,6 +90,7 @@ ROUND_FILES = [
     "round-11-local-runner.md",
     "round-13-autonomous-real-api-r1.md",
     "round-14-autonomous-dev-loop.md",
+    "round-15-playwright-api-fixture.md",
 ]
 
 # .gitignore 必须包含的关键规则片段

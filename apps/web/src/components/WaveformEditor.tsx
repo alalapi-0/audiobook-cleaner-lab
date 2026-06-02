@@ -102,13 +102,21 @@ export default function WaveformEditor({
   return (
     <div className="waveform-editor">
       <div className="waveform-toolbar">
-        <button type="button" className="btn" onClick={() => wsRef.current?.playPause()}>
+        <button
+          type="button"
+          className="btn"
+          disabled={!ready}
+          onClick={() => {
+            if (ready) wsRef.current?.playPause();
+          }}
+        >
           播放/暂停
         </button>
         {selectedSegmentStart != null && (
           <button
             type="button"
             className="btn"
+            disabled={!ready}
             onClick={() => playAround(selectedSegmentStart)}
           >
             播放切点前后 2 秒
