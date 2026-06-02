@@ -1,0 +1,37 @@
+---
+description: "Agent 使用 MCP 工具时的安全、授权与验证约束"
+alwaysApply: true
+---
+
+# MCP Agent Tools
+
+## 浏览器与 UI
+
+- 修改前端、审核页、浏览器交互时，**必须**使用 Playwright MCP 或 Chrome DevTools MCP 做浏览器检查。
+- **不得**仅根据代码静态阅读判断页面实现成功。
+- 浏览器检查须覆盖：页面渲染、**console**、**network**、核心用户流程。
+- 不允许只看截图就宣布功能完成。
+
+## 文件系统
+
+- 文件操作前须确认真实文件状态（filesystem MCP 或等效工具）。
+- **不得**将 filesystem MCP 授权到系统根目录（`/`、`C:\`）、用户主目录根路径或 `${workspaceFolder}` 以外的任意全盘路径。
+- 遵守 `data/` 与 `.gitignore` 数据安全规则。
+
+## GitHub 与提交
+
+- GitHub 相关操作前**必须**检查 `git diff`，避免泄露 `.env`、API Key、token、cookie。
+- **不得**在仓库、MCP 配置、日志或报告中打印真实密钥。
+- **不得**把真实 API Key 写入仓库文件。
+
+## MCP 不可用时的行为
+
+- 若 MCP 未加载：在轮次报告中**记录原因**，并按 [docs/agent_skills/mcp_usage_skill.md](../../docs/agent_skills/mcp_usage_skill.md) 尝试修复或降级。
+- 若缺少第三方 token 且非当前任务唯一阻塞：**不要停止**整个推进；改用 `git` / `gh` CLI、mock 或 dry-run 继续。
+- 仅当缺少的 token 是当前任务**唯一**阻塞项时，才可暂停该子任务并明确说明。
+
+## 引用
+
+- MCP 配置：`.cursor/mcp.json`
+- 使用说明：`docs/agent_skills/mcp_usage_skill.md`
+- 验证门禁：`.cursor/rules/verification-gate.mdc`

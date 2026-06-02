@@ -11,8 +11,10 @@
 | **playwright** | 浏览器自动化：打开页面、点击、输入、截图、基础交互验证 |
 | **chrome-devtools** | 深层 DevTools 调试：console、network、performance、DOM 检查 |
 | **context7** | 查询最新库/框架文档（prompt 中可写 `use context7`） |
+| **filesystem** | 读写当前项目目录（`${workspaceFolder}`），确认真实文件状态 |
+| **github** | 读取仓库、issue、PR、提交状态（需环境变量 `GITHUB_TOKEN`） |
 
-启动方式均为 `npx` stdio，**无需在仓库中写入 API Key**。
+启动方式均为 `npx` stdio。**GitHub MCP** 通过 `GITHUB_TOKEN` 映射为 `GITHUB_PERSONAL_ACCESS_TOKEN`，勿在仓库中写死 token。详见 [docs/agent_skills/mcp_usage_skill.md](agent_skills/mcp_usage_skill.md)。
 
 ## 在 Cursor 中确认 MCP 已启用
 
@@ -22,6 +24,8 @@
    - `playwright`
    - `chrome-devtools`
    - `context7`
+   - `filesystem`
+   - `github`（需本地配置 `GITHUB_TOKEN`）
 4. 若某 server 报错，查看 Output 面板中的 MCP 日志；常见原因是 Node 未安装或网络无法拉取 `npx` 包
 
 ## Skill 与 Rule
@@ -30,6 +34,8 @@
 |------|------|
 | `.cursor/skills/browser-debug-check/SKILL.md` | 浏览器级验证闭环技能（console/network/用户路径/验证报告） |
 | `.cursor/rules/verification-gate.mdc` | 全局规则：涉及前端/UI/API 的任务必须走验证门禁 |
+| `.cursor/rules/mcp-agent-tools.mdc` | MCP 安全与授权约束 |
+| `docs/agent_skills/mcp_usage_skill.md` | MCP 用途、降级策略与自动推进用法 |
 
 ## 验证命令
 
@@ -37,6 +43,8 @@
 
 ```bash
 python3 scripts/agent_gate.py   # 仓库骨架 + 环境 + compileall + npm run agent:check
+python3 scripts/check_mcp_config.py  # MCP 配置格式与安全检查
+npm run check:mcp               # 同上
 python3 scripts/seed_demo_chapter.py  # 本地 Review 演示数据（写入 data/，不进 Git）
 npm run agent:check   # 组合 build + test（按项目现有 scripts 动态组合）
 npm run test          # Playwright smoke test（apps/web，自动启动 Vite dev server）
@@ -88,6 +96,8 @@ use context7 查询 Vite / React 最新文档，确认当前用法是否正确
 - `.cursor/mcp.json`
 - `.cursor/skills/browser-debug-check/SKILL.md`
 - `.cursor/rules/verification-gate.mdc`
+- `.cursor/rules/mcp-agent-tools.mdc`
+- `docs/agent_skills/mcp_usage_skill.md`
 - `apps/web/playwright.config.ts`
 - `apps/web/tests/smoke.spec.ts`
 - `scripts/agent_gate.py`

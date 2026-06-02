@@ -31,7 +31,10 @@ AGENT_ARTIFACTS = [
     ".cursor/mcp.json",
     ".cursor/skills/browser-debug-check/SKILL.md",
     ".cursor/rules/verification-gate.mdc",
+    ".cursor/rules/mcp-agent-tools.mdc",
     "docs/agent-browser-verification.md",
+    "docs/agent_skills/mcp_usage_skill.md",
+    "scripts/check_mcp_config.py",
 ]
 
 MCP_SERVER_NAMES = ("playwright", "chrome-devtools", "context7")

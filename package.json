@@ -8,7 +8,8 @@
     "build": "cd apps/web && npm run build",
     "preview": "cd apps/web && npm run preview",
     "test": "cd apps/web && npm run test",
-    "agent:check": "npm run build && npm run test"
+    "agent:check": "npm run build && npm run test",
+    "check:mcp": "python3 scripts/check_mcp_config.py"
   },
   "engines": {
     "node": ">=18"
