@@ -107,7 +107,7 @@ python3 scripts/run_feedback.py --project-id book_001 --chapter-id chapter_001
 
 ## Workspace MCP Servers
 
-本仓库在 Cursor 中作为 **Workspace MCP Servers** 启用以下 5 个 MCP：
+本仓库在 Cursor 中作为 **Workspace MCP Servers** 启用以下 6 个 MCP：
 
 | MCP | 用途 |
 |-----|------|
@@ -116,6 +116,7 @@ python3 scripts/run_feedback.py --project-id book_001 --chapter-id chapter_001
 | **filesystem** | 当前项目目录内文件读写与检查 |
 | **github** | 仓库、提交、分支、issue、PR |
 | **playwright** | 浏览器自动化与 E2E 验收 |
+| **stitch** | UI 设计、原型、截图、HTML 导出 |
 
 说明：
 
@@ -123,6 +124,62 @@ python3 scripts/run_feedback.py --project-id book_001 --chapter-id chapter_001
 2. 修改配置后，Cursor 可能需要 **重启或 Reload Window** 才能识别。
 3. **GitHub MCP** 需通过环境变量（如 `GITHUB_TOKEN`）提供 token，**不允许**写进仓库。
 4. **filesystem MCP** 仅授权当前项目目录（`${workspaceFolder}`），不授权整盘或用户主目录。
-5. 运行 `npm run check:mcp` 可检查配置格式与安全规则。
+5. 运行 `npm run check:mcp` 与 `npm run check:stitch` 可检查配置格式与安全规则。
 
 详见 [AGENTS.md](AGENTS.md) 与 [docs/agent_skills/mcp_usage_skill.md](docs/agent_skills/mcp_usage_skill.md)。
+
+## Stitch Design MCP
+
+**Stitch** 是 Google 的 UI 设计能力，本项目将其作为 **设计输入层** 接入，供 Cursor / Codex / Agent 生成审核台、控制台等界面原型。
+
+### 为什么使用
+
+- 有声书 Review 审核台、项目控制台等 UI 需要一致的设计参考
+- Stitch 可输出 screen、截图、HTML，减少 Agent 盲目改 UI
+- 与 Playwright / chrome-devtools 验证闭环配合
+
+### 配置 STITCH_API_KEY
+
+```bash
+cp .env.example .env
+# 编辑 .env 填入 STITCH_API_KEY（勿提交 .env）
+export STITCH_API_KEY=your_key_here   # 或在 Cursor 环境中设置
+npm install
+```
+
+### 加载 MCP
+
+1. 配置已写入 [`.cursor/mcp.json`](.cursor/mcp.json)（本地 stdio proxy）
+2. **重启 Cursor** → Settings → MCP → 确认 `stitch` 已启用
+3. `npm run check:stitch`
+
+### 生成 UI 设计
+
+1. 阅读 [docs/design/DESIGN.md](docs/design/DESIGN.md) 与 [docs/design/stitch/UI_TASKS.md](docs/design/stitch/UI_TASKS.md)
+2. 使用 [PROMPT_TEMPLATES.md](docs/design/stitch/PROMPT_TEMPLATES.md) 通过 Stitch MCP 生成
+3. 结果保存到 `docs/design/stitch/exports/`、`screenshots/`、`reviews/`
+
+### 角色分工
+
+| 角色 | 职责 |
+|------|------|
+| **Stitch** | 设计输入（原型、截图、HTML） |
+| **Cursor** | 根据设计在 `apps/web/` 落地实现 |
+| **Codex** | 用户视角测试，输出问题与改进任务 |
+
+### 安全注意事项
+
+- **不要**提交 `.env`
+- **不要**把 key 写入代码或 `.cursor/mcp.json`
+- **不要**用 Stitch 导出代码无审查覆盖业务代码
+- 实现后必须用 Playwright 或 chrome-devtools 验证
+
+### 常见问题
+
+| 问题 | 处理 |
+|------|------|
+| stitch MCP 未连接 | 设置 `STITCH_API_KEY`，`npm install`，重启 Cursor |
+| 无 Stitch 工具 | 检查 MCP 面板 server 名是否为 `stitch` |
+| 不想用 Stitch | 直接用 `docs/UI_DESIGN.md` 与 `docs/design/stitch/UI_TASKS.md` 手写任务 |
+
+详见 [docs/design/stitch/README.md](docs/design/stitch/README.md) 与 [STITCH_MCP_SETUP.md](docs/design/stitch/STITCH_MCP_SETUP.md)。

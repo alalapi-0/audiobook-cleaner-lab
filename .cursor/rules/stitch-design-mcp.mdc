@@ -1,0 +1,44 @@
+---
+description: "Stitch UI 设计 MCP — 设计输入优先，实现须浏览器验证"
+alwaysApply: true
+---
+
+# Stitch Design MCP
+
+## 何时使用
+
+涉及 **UI、页面、审核台、预览页、管理后台、Debug 面板** 时：
+
+1. **优先**阅读 [docs/design/DESIGN.md](../../docs/design/DESIGN.md) 与 [docs/design/stitch/](../../docs/design/stitch/)
+2. 若 **Stitch MCP** 可用，用于生成原型、截图、HTML、DESIGN 变体
+3. 实现须遵守本项目技术栈：**React + Vite + TypeScript + wavesurfer.js**
+
+## Stitch 边界
+
+- Stitch 是 **设计输入**，不是未经审查的代码覆盖源
+- **禁止**将 Stitch 导出 HTML 无审查覆盖 `apps/web/` 或 `packages/`
+- 导出物必须进入：
+  - `docs/design/stitch/exports/`
+  - `docs/design/stitch/screenshots/`
+  - `docs/design/stitch/reviews/`
+
+## 实现后验证
+
+- **必须**使用 **playwright** 或 **chrome-devtools** 检查页面、console、network、核心流程
+- 见 [verification-gate.mdc](verification-gate.mdc) 与 [browser-debug-check/SKILL.md](../skills/browser-debug-check/SKILL.md)
+
+## 安全
+
+- **禁止**提交 `STITCH_API_KEY` 或任何真实 API Key
+- **禁止**在 [`.cursor/mcp.json`](../mcp.json) 硬编码 key
+- 使用环境变量 `${env:STITCH_API_KEY}`
+
+## MCP 不可用
+
+在轮次报告中 **记录原因**，使用 [UI_TASKS.md](../../docs/design/stitch/UI_TASKS.md) 与 [PROMPT_TEMPLATES.md](../../docs/design/stitch/PROMPT_TEMPLATES.md) 继续推进。
+
+## 引用
+
+- [STITCH_MCP_SETUP.md](../../docs/design/stitch/STITCH_MCP_SETUP.md)
+- [AGENTS.md](../../AGENTS.md) — Stitch Design MCP 节
+- `npm run check:stitch`

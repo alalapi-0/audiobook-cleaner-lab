@@ -13,8 +13,9 @@
 | **context7** | 查询最新库/框架文档（prompt 中可写 `use context7`） |
 | **filesystem** | 读写当前项目目录（`${workspaceFolder}`），确认真实文件状态 |
 | **github** | 读取仓库、issue、PR、提交状态（需环境变量 `GITHUB_TOKEN`） |
+| **stitch** | UI 设计、原型、截图（需 `STITCH_API_KEY`，本地 proxy） |
 
-启动方式均为 `npx` stdio。**GitHub MCP** 通过 `GITHUB_TOKEN` 映射为 `GITHUB_PERSONAL_ACCESS_TOKEN`，勿在仓库中写死 token。详见 [docs/agent_skills/mcp_usage_skill.md](agent_skills/mcp_usage_skill.md)。
+多数 server 为 `npx` stdio；**stitch** 为 `node scripts/stitch_mcp_proxy.mjs`。**GitHub** 通过 `GITHUB_TOKEN` 映射；**Stitch** 通过 `STITCH_API_KEY`。勿在仓库中写死 token。详见 [docs/agent_skills/mcp_usage_skill.md](agent_skills/mcp_usage_skill.md) 与 [docs/design/stitch/STITCH_MCP_SETUP.md](design/stitch/STITCH_MCP_SETUP.md)。
 
 ## 在 Cursor 中确认 MCP 已启用
 
@@ -26,6 +27,7 @@
    - `context7`
    - `filesystem`
    - `github`（需本地配置 `GITHUB_TOKEN`）
+   - `stitch`（需 `STITCH_API_KEY` 与 `npm install`）
 4. 若某 server 报错，查看 Output 面板中的 MCP 日志；常见原因是 Node 未安装或网络无法拉取 `npx` 包
 
 ## Skill 与 Rule

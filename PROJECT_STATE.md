@@ -4,9 +4,11 @@
 
 ## 当前 Stage
 
-**Stage 12 — 连续自动推进与本地主链路巩固（Round 14 完成）**
+**Stage 12 — 连续自动推进与本地主链路巩固**
 
 ## 当前 Round
+
+**Round 16 — Stitch Design MCP 集成与文档补全**（已完成）
 
 **Round 15 — Playwright API Fixture**（已完成）
 
@@ -34,6 +36,7 @@
 - [x] Round 13 R1 — 真实 LLM Adapter 骨架（无 Key 时跳过真实调用）
 - [x] Round 14 — auto_advance、start_local 自动 seed、check_repo 扩展
 - [x] Round 15 — Playwright 双 webServer + 波形按钮 ready 门禁
+- [x] Round 16 — Stitch MCP（本地 proxy）、docs/design/、MCP/测试文档补全
 
 ## 下一轮目标
 
@@ -58,6 +61,7 @@
 
 | 日期 | Round | 摘要 |
 |------|-------|------|
+| 2026-06-06 | Round 16 | Stitch MCP、docs/design/stitch/、check:stitch、Agent 文档 |
 | 2026-06-02 | Round 15 | Playwright API fixture、波形按钮 ready 门禁 |
 | 2026-06-02 | Round 14 | auto_advance、start_local 自动 seed、agent:advance |
 | 2026-06-01 | Round 13 R1 | OpenAiCompatibleAdapter、real_api_check（无 Key 硬阻塞真实调用） |

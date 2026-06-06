@@ -17,6 +17,7 @@ REQUIRED_SERVERS = (
     "filesystem",
     "github",
     "playwright",
+    "stitch",
 )
 
 # filesystem args 中视为危险的根路径（大小写不敏感匹配片段）

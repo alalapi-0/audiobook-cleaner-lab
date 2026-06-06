@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * 轻量 MCP 配置检查 — 验证 .cursor/mcp.json 格式、5 个必需 server 与安全规则。
+ * 轻量 MCP 配置检查 — 验证 .cursor/mcp.json 格式、6 个必需 server 与安全规则。
  * 不打印任何敏感值。
  */
 
@@ -16,6 +16,7 @@ const REQUIRED_SERVERS = [
   "filesystem",
   "github",
   "playwright",
+  "stitch",
 ];
 
 const SAFE_WORKSPACE_PLACEHOLDERS = ["${workspaceFolder}", "${workspaceRoot}"];

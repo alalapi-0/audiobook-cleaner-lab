@@ -13,6 +13,7 @@
 | **context7** | 查询最新库/框架文档（prompt 中可写 `use context7`） | 否（可选 API Key 提升限额） |
 | **filesystem** | 读写项目内文件、检查真实文件状态 | 否 |
 | **github** | 读取仓库、提交、issue、PR、push 状态 | 是（`GITHUB_TOKEN` / `GITHUB_PERSONAL_ACCESS_TOKEN`） |
+| **stitch** | UI 设计、原型、截图、HTML 导出 | 是（`STITCH_API_KEY`） |
 
 ## Playwright MCP 用于什么
 
@@ -44,18 +45,20 @@
 | context7 不可用 | 阅读项目内 `docs/`、官方文档链接；标注「未使用 context7」 |
 | Playwright MCP 不可用 | 运行 `npm run test`（apps/web Playwright smoke）；手动启动 dev server 并记录阻塞原因 |
 | filesystem MCP 不可用 | 使用 Cursor 内置读文件工具；提交前仍须 `git diff` 确认 |
+| Stitch MCP 不可用 | 使用 [docs/design/stitch/UI_TASKS.md](../design/stitch/UI_TASKS.md) 与 [PROMPT_TEMPLATES.md](../design/stitch/PROMPT_TEMPLATES.md)；记录原因 |
 
 **原则**：缺少第三方 token 时进入 mock / dry-run，**不要卡死**整个自动推进流程，除非该 token 是当前任务唯一阻塞项。
 
 ## 后续自动推进轮如何使用这些 MCP
 
 1. **轮次开始前**：确认 Cursor Settings → MCP 中相关 server 已加载（修改 `.cursor/mcp.json` 后需 **重启 Cursor** 或 Reload Window）。
-2. **运行检查**：`python3 scripts/check_mcp_config.py` 或 `npm run check:mcp`。
-3. **涉及 UI**：优先 Playwright MCP → 查看页面、console、network、核心流程 → 再跑 `npm run agent:check`。
-4. **涉及文件**：用 filesystem MCP 或内置工具确认真实文件状态，不假设写入成功。
-5. **涉及 GitHub**：先 `git diff` 检查是否泄露密钥，再决定是否 push / 开 PR。
-6. **查文档**：prompt 中加 `use context7` 查询 React / Vite / FastAPI 等最新用法。
-7. **完整门禁**：`python3 scripts/agent_gate.py`。
+2. **运行检查**：`python3 scripts/check_mcp_config.py` 或 `npm run check:mcp`；Stitch 专项：`npm run check:stitch`。
+3. **涉及 UI 设计**：先读 `docs/design/`；可用时优先 Stitch MCP 生成原型 → 归档 `docs/design/stitch/` → 再实现。
+4. **涉及 UI 验证**：优先 Playwright MCP → 查看页面、console、network、核心流程 → 再跑 `npm run agent:check`。
+5. **涉及文件**：用 filesystem MCP 或内置工具确认真实文件状态，不假设写入成功。
+6. **涉及 GitHub**：先 `git diff` 检查是否泄露密钥，再决定是否 push / 开 PR。
+7. **查文档**：prompt 中加 `use context7` 查询 React / Vite / FastAPI 等最新用法。
+8. **完整门禁**：`python3 scripts/agent_gate.py`。
 
 ## 安全禁令
 

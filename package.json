@@ -10,9 +10,14 @@
     "test": "cd apps/web && npm run test",
     "agent:check": "npm run build && npm run test",
     "agent:advance": "python3 scripts/auto_advance.py",
-    "check:mcp": "node scripts/check_mcp_config.js"
+    "check:mcp": "node scripts/check_mcp_config.js",
+    "check:stitch": "node scripts/check_stitch_config.js"
   },
   "engines": {
     "node": ">=18"
+  },
+  "devDependencies": {
+    "@google/stitch-sdk": "^0.3.5",
+    "@modelcontextprotocol/sdk": "^1.25.2"
   }
 }

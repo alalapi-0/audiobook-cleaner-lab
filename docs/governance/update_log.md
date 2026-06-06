@@ -1,5 +1,19 @@
 # 治理协议更新日志
 
+## Round 16 — 2026-06-06 — Stitch Design MCP 集成
+
+- `.cursor/mcp.json` — 合并 `stitch` server（本地 stdio proxy）
+- `scripts/stitch_mcp_proxy.mjs` — `@google/stitch-sdk` StitchProxy
+- `scripts/check_stitch_config.js` — Stitch 配置与安全检查
+- `docs/design/` — 设计输入层与 stitch 子目录文档
+- `docs/mcp/`、`docs/testing/`、`docs/agent_workflow/` — 文档补全
+- `AGENTS.md`、`agent.md`、`README.md` — Stitch 使用说明
+- `.cursor/rules/stitch-design-mcp.mdc` — UI 任务优先 Stitch 设计
+- `.env.example` — `STITCH_API_KEY` 占位
+- `package.json` — `check:stitch`、devDependencies
+
+---
+
 ## Round 15 — 2026-06-02 — Playwright API Fixture
 
 - `apps/web/playwright.config.ts` — 测试时自动启动 API + seed

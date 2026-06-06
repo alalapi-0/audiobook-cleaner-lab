@@ -5,13 +5,14 @@ alwaysApply: true
 
 # Workspace MCP Servers（必需）
 
-当前仓库默认需要以下 5 个 Workspace MCP Servers：
+当前仓库默认需要以下 6 个 Workspace MCP Servers：
 
 - **chrome-devtools**
 - **context7**
 - **filesystem**
 - **github**
 - **playwright**
+- **stitch**
 
 配置位于 [`.cursor/mcp.json`](../mcp.json)。修改后需 **重启 Cursor 或 Reload Window** 才能生效。
 
@@ -30,6 +31,7 @@ Agent 开始自动推进轮之前，必须：
 | **context7** | 文档与依赖不确定时 **优先** 查询第三方库/框架文档 |
 | **filesystem** | 文件读写 **仅限** 当前项目目录（`${workspaceFolder}`）；不得授权 `/`、`~`、`C:\`、用户主目录或磁盘根目录 |
 | **github** | 操作前 **必须** `git status` 与 `git diff`；提交前确认无 token、API Key、cookie、无关大文件 |
+| **stitch** | UI 设计输入；优先读 `docs/design/`；**禁止**硬编码 `STITCH_API_KEY`；导出物进 `docs/design/stitch/` |
 
 ## MCP 不可用时
 
