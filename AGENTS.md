@@ -163,3 +163,30 @@ python3 scripts/check_mcp_config.py  # Python 等价检查（可选）
 8. 若 Stitch MCP 不可用，Agent 应记录原因，并使用文档模板继续推进。
 
 配置详见 [docs/design/stitch/STITCH_MCP_SETUP.md](docs/design/stitch/STITCH_MCP_SETUP.md)。
+
+## Cursor Browser UI Workflow
+
+Cursor 在本仓库做 UI 优化时，必须遵守以下规则（详见 [docs/cursor_browser_ui_runbook.md](docs/cursor_browser_ui_runbook.md) 与 [docs/cursor_tool_registry_check.md](docs/cursor_tool_registry_check.md)）：
+
+1. **必须使用普通前台 Agent**；批准 MCP 或修改配置后应完全退出 Cursor、重开仓库、**新建对话**。
+2. **禁止 Multitask 控制浏览器**；子 Agent 可能未继承 Workspace MCP（见 `.cursor/rules/no-multitask-for-browser.mdc`）。
+3. **每轮 UI 实现必须先检查真实页面**（chrome-devtools 或 playwright），不得仅凭代码静态阅读。
+4. **每轮 UI 实现必须进行 before / after 浏览器检查**（截图、console、network）。
+5. **Stitch 用作设计输入**；导出物存 `docs/design/stitch/`，禁止无审查覆盖业务代码。
+6. **chrome-devtools 用作页面调试**（console、network、截图、DOM）。
+7. **playwright 用作回归测试**与稳定 E2E 验收。
+8. **filesystem 用作文件真值检查**（仅 `${workspaceFolder}`）。
+9. **context7 用作文档查询**（React、Vite、wavesurfer 等）。
+10. **github 用作提交和远程状态**（token 仅环境变量，提交前 `git diff`）。
+11. **微信已登录页面**（其他项目）只允许 `wechat-chrome-session`；**本仓库为本地 Web，不得使用 wechat-chrome-session**。
+12. **若当前对话线程缺工具**，输出 `BLOCKED: MISSING_FROM_THREAD_TOOL_REGISTRY` 并停止，不要假装执行浏览器检查。
+
+检查命令：
+
+```bash
+npm run check:cursor-mcp   # CLI 层 MCP（不代表当前线程）
+npm run check:mcp
+npm run check:stitch
+```
+
+UI 推进 Prompt 模板：[docs/prompts/CURSOR_UI_IMPLEMENTATION_PROMPT.md](docs/prompts/CURSOR_UI_IMPLEMENTATION_PROMPT.md)。

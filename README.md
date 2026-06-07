@@ -183,3 +183,47 @@ npm install
 | 不想用 Stitch | 直接用 `docs/UI_DESIGN.md` 与 `docs/design/stitch/UI_TASKS.md` 手写任务 |
 
 详见 [docs/design/stitch/README.md](docs/design/stitch/README.md) 与 [STITCH_MCP_SETUP.md](docs/design/stitch/STITCH_MCP_SETUP.md)。
+
+## Cursor Browser UI Workflow
+
+本仓库已配置 Cursor Agent 通过 MCP 进行浏览器检查、Stitch 设计、UI 实现与回归验证。完整 Runbook：[docs/cursor_browser_ui_runbook.md](docs/cursor_browser_ui_runbook.md)。
+
+### 1. 如何检查 MCP
+
+```bash
+npm run check:cursor-mcp
+# 或
+bash scripts/check_cursor_mcp_status.sh
+```
+
+同时可运行 `npm run check:mcp` 与 `npm run check:stitch` 检查配置格式与安全。
+
+**注意**：上述脚本只检查 **CLI 层**；当前 Agent 对话线程是否暴露工具，须在对话中自行确认。见 [docs/cursor_tool_registry_check.md](docs/cursor_tool_registry_check.md)。
+
+### 2. 为什么需要重启 Cursor
+
+- 在 Settings 中**批准 MCP** 后，**旧 Agent 对话**可能仍停留在批准前的工具注册表，调用会报 `server does not exist`。
+- **Multitask** 子 Agent 可能**不继承** Workspace MCP，浏览器任务易失败。
+- 最稳定做法：**完全退出 Cursor** → 重开仓库 → **新建普通前台 Agent 对话** → **禁用 Multitask**。
+
+### 3. UI 优化标准流程
+
+1. 启动项目（`bash scripts/start_local.sh`）
+2. 打开 Review 页面
+3. **Before**：截图 + console + network
+4. 查阅或调用 **Stitch** 设计
+5. 修改 `apps/web/`（每轮一个 UI 切片）
+6. 重新打开页面
+7. **After**：console / network 检查
+8. 运行 `npm run test` / `npm run build`
+9. 用户要求时 commit / push
+
+启动 Prompt 模板：[docs/prompts/CURSOR_UI_IMPLEMENTATION_PROMPT.md](docs/prompts/CURSOR_UI_IMPLEMENTATION_PROMPT.md)。
+
+### 4. 微信页面特殊说明（本仓库不适用）
+
+本仓库为**本地 Web 审核台**，不使用微信公众号已登录页面。若在其他项目操作微信已登录页：
+
+- **必须**使用 `wechat-chrome-session`
+- **禁止**用 Playwright 新开页面替代（无登录态）
+- 遇到扫码 / 风控须停止并等待用户手动处理

@@ -20,7 +20,7 @@
 | playwright | E2E |
 | **stitch** | **UI 设计** |
 
-检查：`npm run check:mcp` · `npm run check:stitch`
+检查：`npm run check:mcp` · `npm run check:stitch` · `npm run check:cursor-mcp`
 
 ## Stitch Design MCP
 
@@ -47,11 +47,22 @@
 | 真实 API | [docs/testing/REAL_API_TESTING.md](docs/testing/REAL_API_TESTING.md) |
 | 用户视角 | [docs/testing/USER_PERSPECTIVE_TESTING.md](docs/testing/USER_PERSPECTIVE_TESTING.md) |
 
+## Cursor Browser UI Workflow
+
+1. **普通前台 Agent only**；禁止 Multitask 控制浏览器。
+2. 任务前确认**当前线程**是否暴露 stitch / chrome-devtools / playwright 工具。
+3. 每轮 UI：**before 截图 + console/network → 改一个切片 → after 检查 → 测试**。
+4. 缺工具 → `BLOCKED: MISSING_FROM_THREAD_TOOL_REGISTRY`，完全退出 Cursor 后新建对话。
+5. 本仓库本地 Web：**不用** wechat-chrome-session。
+
+详见 [docs/cursor_browser_ui_runbook.md](docs/cursor_browser_ui_runbook.md) · Prompt：[docs/prompts/CURSOR_UI_IMPLEMENTATION_PROMPT.md](docs/prompts/CURSOR_UI_IMPLEMENTATION_PROMPT.md)
+
 ## 验收
 
 ```bash
 python3 scripts/check_repo.py
 npm run check:mcp
 npm run check:stitch
+npm run check:cursor-mcp
 python3 scripts/agent_gate.py
 ```

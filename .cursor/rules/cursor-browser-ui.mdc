@@ -1,0 +1,36 @@
+---
+description: "Cursor 浏览器 UI 优化任务：真实页面检查、before/after 与 BLOCKED 规则"
+alwaysApply: true
+---
+
+# Cursor Browser UI
+
+## 必须遵守
+
+1. **任何 UI 优化任务必须先打开真实页面检查**（chrome-devtools 或 playwright），不得仅凭代码判断。
+2. **不允许只凭代码判断 UI 已完成**；必须看到真实渲染结果。
+3. **Stitch 只能作为设计输入**；禁止无审查地用 Stitch 导出代码覆盖业务实现。
+4. **实现后必须再次使用浏览器检查**（刷新或重新打开页面）。
+5. **必须检查 console 和 network**；存在 error 或异常请求须修复或记录。
+6. **必须保存 before / after 观察记录**（截图路径或文字摘要写入轮次报告）。
+7. **必须运行可用测试**（如 `npm run test`、`npm run build` 或 round 声明的验收命令）。
+8. **若浏览器工具没有暴露给当前对话线程**，必须停止并报告 `BLOCKED: MISSING_FROM_THREAD_TOOL_REGISTRY`，不得假装执行。
+9. **每轮 UI 改造只改一个主要切片**（例如单一组件区或单一页面区块）。
+10. **不允许为了美观破坏业务功能**（波形、切点、审核流程等核心逻辑不可为样式让步）。
+
+## 工具分工（本仓库）
+
+| 工具 | 用途 |
+|------|------|
+| stitch | 设计输入 |
+| chrome-devtools | 页面调试、console、network、截图 |
+| playwright | E2E 与回归 |
+| filesystem | 文件真值检查 |
+| context7 | 前端库文档 |
+| github | 提交与远程状态 |
+
+## 参考
+
+- [docs/cursor_browser_ui_runbook.md](../../docs/cursor_browser_ui_runbook.md)
+- [docs/cursor_tool_registry_check.md](../../docs/cursor_tool_registry_check.md)
+- [docs/prompts/CURSOR_UI_IMPLEMENTATION_PROMPT.md](../../docs/prompts/CURSOR_UI_IMPLEMENTATION_PROMPT.md)

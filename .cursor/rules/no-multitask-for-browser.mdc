@@ -1,0 +1,40 @@
+---
+description: "禁止 Multitask 执行浏览器控制；微信与本地 Web 工具隔离"
+alwaysApply: true
+---
+
+# No Multitask for Browser
+
+## Multitask 禁止范围
+
+1. 涉及 **browser**、**chrome-devtools**、**playwright**、**wechat-chrome-session** 的任务 **禁止使用 Multitask**。
+2. 浏览器控制任务 **必须使用普通前台 Agent**。
+3. 若当前处于 **Multitask 或后台子 Agent**，必须 **停止** 并要求用户切换到 **普通前台 Agent** 后重试。
+4. 子 Agent 可能 **未继承 Workspace MCP**；在 Multitask 中调用浏览器工具高概率失败。
+
+## 工具隔离
+
+### 微信公众号已登录页面（其他仓库适用）
+
+- **只使用** `wechat-chrome-session`。
+- **禁止** 使用普通 chrome-devtools、playwright、`browser_tabs`、`new_page`、`navigate_page` 等会新开未登录浏览器的工具。
+
+### 普通本地 Web UI 优化（本仓库）
+
+- 使用 **stitch + chrome-devtools + playwright**（见 [cursor-browser-ui.mdc](cursor-browser-ui.mdc)）。
+- **不得** 使用 `wechat-chrome-session`（本仓库非微信项目）。
+
+## BLOCKED
+
+线程缺工具或处于 Multitask 时，输出：
+
+```
+BLOCKED: MISSING_FROM_THREAD_TOOL_REGISTRY
+```
+
+并指引用户：完全退出 Cursor → 重开仓库 → 新建普通前台 Agent → 禁用 Multitask。
+
+## 参考
+
+- [docs/cursor_browser_ui_runbook.md](../../docs/cursor_browser_ui_runbook.md)
+- [docs/cursor_tool_registry_check.md](../../docs/cursor_tool_registry_check.md)
