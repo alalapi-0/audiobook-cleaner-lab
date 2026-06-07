@@ -34,6 +34,10 @@ export default function WaveformEditor({
   useEffect(() => {
     if (!containerRef.current) return;
 
+    let cancelled = false;
+    setReady(false);
+    setError(null);
+
     const ws = WaveSurfer.create({
       container: containerRef.current,
       waveColor: "#90caf9",
@@ -48,6 +52,7 @@ export default function WaveformEditor({
     regionsRef.current = regions;
 
     ws.on("ready", () => {
+      if (cancelled) return;
       setReady(true);
       deleteRanges.forEach((dr, i) => {
         regions.addRegion({
@@ -61,7 +66,9 @@ export default function WaveformEditor({
       });
     });
 
-    ws.on("error", (err) => setError(String(err)));
+    ws.on("error", (err) => {
+      if (!cancelled) setError(String(err));
+    });
 
     regions.on("region-updated", () => {
       const updated: DeleteRange[] = regions
@@ -77,8 +84,11 @@ export default function WaveformEditor({
     });
 
     return () => {
+      cancelled = true;
+      setReady(false);
       ws.destroy();
       wsRef.current = null;
+      regionsRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [audioUrl]);
@@ -86,18 +96,16 @@ export default function WaveformEditor({
   const playAround = (center: number, windowSec = 2) => {
     const ws = wsRef.current;
     if (!ws || !ready) return;
-    const dur = ws.getDuration();
-    const start = Math.max(0, center - windowSec);
-    const end = Math.min(dur, center + windowSec);
-    ws.play(start, end);
-  };
-
-  useEffect(() => {
-    if (selectedSegmentStart != null && ready) {
-      playAround(selectedSegmentStart);
+    try {
+      const dur = ws.getDuration();
+      if (!dur || dur <= 0) return;
+      const start = Math.max(0, center - windowSec);
+      const end = Math.min(dur, center + windowSec);
+      ws.play(start, end);
+    } catch {
+      // StrictMode 重挂载时可能短暂未就绪，忽略即可
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedSegmentStart, ready]);
+  };
 
   return (
     <div className="waveform-editor">
@@ -127,7 +135,11 @@ export default function WaveformEditor({
         </span>
       </div>
       <div ref={containerRef} className="waveform-container" />
-      {error && <p className="status error">波形加载失败: {error}</p>}
+      {error && (
+        <p className="status error">
+          波形加载失败，请刷新页面或检查音频文件是否可访问。
+        </p>
+      )}
       {!ready && !error && <p className="status">波形加载中…</p>}
     </div>
   );

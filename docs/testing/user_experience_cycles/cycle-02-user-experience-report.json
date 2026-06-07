@@ -1,0 +1,36 @@
+{
+  "cycle": 2,
+  "branch": "main",
+  "commit": "pending",
+  "has_p0": false,
+  "has_p1": false,
+  "decision": "stop",
+  "issues": [
+    {
+      "id": "C02-P2-01",
+      "level": "P2",
+      "title": "已有 seed 仍为旧 1 秒音频",
+      "area": "seed_demo_chapter",
+      "reproduction": "章节已存在时跳过，不更新 wav",
+      "impact": "波形可视化一般",
+      "suggested_fix": "文档提示 seed --force",
+      "must_fix_before_stop": false
+    },
+    {
+      "id": "C02-P2-02",
+      "level": "P2",
+      "title": "未知路由无 NotFound",
+      "area": "App routing",
+      "reproduction": "访问 /admin",
+      "impact": "边缘路径困惑",
+      "suggested_fix": "增加未实现说明页",
+      "must_fix_before_stop": false
+    }
+  ],
+  "commands": [
+    { "command": "python unittest", "status": "passed" },
+    { "command": "npm run build", "status": "passed" },
+    { "command": "npm run test", "status": "passed" },
+    { "command": "agent_gate.py", "status": "passed" }
+  ]
+}

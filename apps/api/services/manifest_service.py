@@ -54,6 +54,13 @@ class ManifestService:
             return path
         return self.root / path
 
+    def _display_path(self, path: Path) -> str:
+        """错误信息中使用的仓库相对路径，避免暴露本机绝对路径。"""
+        try:
+            return str(path.relative_to(self.root))
+        except ValueError:
+            return path.name
+
     def _validate_source_paths(self, source_audio: str, source_text: str) -> None:
         """校验音频与原文路径存在（不读取文件内容）。"""
         audio_path = self._resolve_path(source_audio)
@@ -74,7 +81,7 @@ class ManifestService:
     def _read_json(self, path: Path) -> dict[str, Any]:
         """读取 JSON 文件。"""
         if not path.is_file():
-            raise ManifestError(f"manifest 不存在: {path}")
+            raise ManifestError(f"manifest 不存在: {self._display_path(path)}")
         return json.loads(path.read_text(encoding="utf-8"))
 
     def create_project(

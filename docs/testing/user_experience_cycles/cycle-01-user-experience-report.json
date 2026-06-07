@@ -1,0 +1,56 @@
+{
+  "cycle": 1,
+  "branch": "main",
+  "commit": "66a65e86daa8257b70a133ebf89b2da75a852529",
+  "has_p0": false,
+  "has_p1": true,
+  "decision": "continue_fix",
+  "issues": [
+    {
+      "id": "C01-P1-01",
+      "level": "P1",
+      "title": "WaveSurfer 初始化失败",
+      "area": "WaveformEditor",
+      "reproduction": "打开 Review 页，波形区显示 WaveSurfer is not initialized",
+      "impact": "波形渲染、播放、拖动切点不可用",
+      "suggested_fix": "修复 StrictMode 重挂载竞态，重置 ready 状态",
+      "must_fix_before_stop": true
+    },
+    {
+      "id": "C01-P1-02",
+      "level": "P1",
+      "title": "缺少项目/章节导航",
+      "area": "App",
+      "reproduction": "首次访问 / 无项目选择入口",
+      "impact": "新用户必须手写 URL 参数",
+      "suggested_fix": "增加项目/章节下拉与演示章节按钮",
+      "must_fix_before_stop": true
+    },
+    {
+      "id": "C01-P1-03",
+      "level": "P1",
+      "title": "UI 缺乏产品感",
+      "area": "ReviewPage",
+      "reproduction": "首屏无工具说明与步骤引导",
+      "impact": "用户难以理解工具用途与下一步",
+      "suggested_fix": "副标题、步骤条、章节说明卡片",
+      "must_fix_before_stop": true
+    },
+    {
+      "id": "C01-P2-01",
+      "level": "P2",
+      "title": "错误态暴露绝对路径",
+      "area": "API/ReviewPage",
+      "reproduction": "nonexistent 项目加载失败",
+      "impact": "泄露本机路径",
+      "suggested_fix": "API 404 友好化 + 前端 parseApiError",
+      "must_fix_before_stop": false
+    }
+  ],
+  "commands": [
+    { "command": "python unittest", "status": "passed" },
+    { "command": "npm run build", "status": "passed" },
+    { "command": "npm run test", "status": "passed" },
+    { "command": "agent_gate.py", "status": "passed" }
+  ]
+}

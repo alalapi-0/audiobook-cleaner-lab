@@ -6,6 +6,7 @@ export default defineConfig({
   root: ".",
   publicDir: "public",
   server: {
+    host: true,
     port: 5173,
     proxy: {
       "/api": {

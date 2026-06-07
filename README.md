@@ -40,7 +40,7 @@ bash scripts/start_local.sh
 ```
 
 - API: http://127.0.0.1:8000
-- Review 页: http://127.0.0.1:5173/?project_id=book_001&chapter_id=chapter_001
+- Review 页: http://localhost:5173/?project_id=book_001&chapter_id=chapter_001（`127.0.0.1:5173` 亦可）
 
 ### 4. Mock 单章全流程（CLI）
 

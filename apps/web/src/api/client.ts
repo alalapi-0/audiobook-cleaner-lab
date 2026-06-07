@@ -53,6 +53,36 @@ export interface CutPlan {
 
 const API_BASE = "/api";
 
+const DEMO_PROJECT = "book_001";
+const DEMO_CHAPTER = "chapter_001";
+
+/** 将 API 错误转为用户可读文案，避免暴露本机绝对路径或原始 JSON */
+export function parseApiError(body: string, status: number): string {
+  if (status === 404) {
+    return `未找到项目或章节。请检查参数，或打开演示章节 ${DEMO_PROJECT}/${DEMO_CHAPTER}。`;
+  }
+
+  try {
+    const parsed = JSON.parse(body) as { detail?: string };
+    const detail = parsed.detail ?? body;
+    if (
+      typeof detail === "string" &&
+      (detail.includes("/Users/") ||
+        detail.includes(":\\") ||
+        detail.includes("manifest 不存在") ||
+        detail.includes("文件不存在"))
+    ) {
+      return `未找到项目或章节。请检查参数，或打开演示章节 ${DEMO_PROJECT}/${DEMO_CHAPTER}。`;
+    }
+    return typeof detail === "string" ? detail : "请求失败，请稍后重试。";
+  } catch {
+    if (body.includes("/Users/") || body.includes("manifest 不存在")) {
+      return `未找到项目或章节。请检查参数，或打开演示章节 ${DEMO_PROJECT}/${DEMO_CHAPTER}。`;
+    }
+    return body || "请求失败，请稍后重试。";
+  }
+}
+
 export async function fetchReviewData(
   projectId: string,
   chapterId: string,
@@ -61,7 +91,7 @@ export async function fetchReviewData(
     `${API_BASE}/projects/${projectId}/chapters/${chapterId}/review-data`,
   );
   if (!res.ok) {
-    throw new Error(await res.text());
+    throw new Error(parseApiError(await res.text(), res.status));
   }
   return res.json();
 }
@@ -80,7 +110,7 @@ export async function saveReview(
     },
   );
   if (!res.ok) {
-    throw new Error(await res.text());
+    throw new Error(parseApiError(await res.text(), res.status));
   }
   return res.json();
 }
@@ -96,7 +126,7 @@ export async function fetchCutPlan(
     return null;
   }
   if (!res.ok) {
-    throw new Error(await res.text());
+    throw new Error(parseApiError(await res.text(), res.status));
   }
   return res.json();
 }
@@ -119,7 +149,7 @@ export async function updateCutPlan(
     },
   );
   if (!res.ok) {
-    throw new Error(await res.text());
+    throw new Error(parseApiError(await res.text(), res.status));
   }
   return res.json();
 }
@@ -127,3 +157,5 @@ export async function updateCutPlan(
 export function audioServeUrl(sourceAudioPath: string): string {
   return `${API_BASE}/audio/${sourceAudioPath}`;
 }
+
+export const DEMO = { projectId: DEMO_PROJECT, chapterId: DEMO_CHAPTER };

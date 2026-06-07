@@ -4,6 +4,8 @@
 
 from __future__ import annotations
 
+import math
+import struct
 import sys
 import wave
 from pathlib import Path
@@ -20,13 +22,25 @@ from packages.llm_core.service import LlmCutService  # noqa: E402
 from packages.text_core.service import TextNormalizationService  # noqa: E402
 
 
-def _make_wav(path: Path) -> None:
+def _make_wav(path: Path, duration_sec: float = 5.0) -> None:
+    """生成带简单音调的演示 wav，便于波形区可视化（非静音）。"""
     path.parent.mkdir(parents=True, exist_ok=True)
+    sample_rate = 16000
+    n_samples = int(sample_rate * duration_sec)
+    frames: list[bytes] = []
+    for i in range(n_samples):
+        t = i / sample_rate
+        seg = int(t / max(duration_sec / 4, 0.25))
+        amp = 0.12 + 0.08 * (seg % 3)
+        freq = 180 + seg * 40
+        val = int(amp * 32767 * math.sin(2 * math.pi * freq * t))
+        val = max(-32767, min(32767, val))
+        frames.append(struct.pack("<h", val))
     with wave.open(str(path), "w") as wf:
         wf.setnchannels(1)
         wf.setsampwidth(2)
-        wf.setframerate(16000)
-        wf.writeframes(b"\x00\x00" * 16000)
+        wf.setframerate(sample_rate)
+        wf.writeframes(b"".join(frames))
 
 
 def seed_demo_chapter(

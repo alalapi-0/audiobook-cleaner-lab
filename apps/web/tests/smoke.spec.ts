@@ -23,8 +23,8 @@ test.describe("smoke", () => {
     const errors = trackConsoleErrors(page);
 
     await page.goto("/");
-    await expect(page.locator("h1")).toContainText("audiobook-cleaner-lab Review");
-    await expect(page.locator(".badge")).toContainText("MVP");
+    await expect(page.locator("h1")).toContainText("audiobook-cleaner-lab");
+    await expect(page.locator(".badge")).toContainText("Review");
 
     expect(unexpectedConsoleErrors(errors), `console errors:\n${errors.join("\n")}`).toEqual([]);
   });

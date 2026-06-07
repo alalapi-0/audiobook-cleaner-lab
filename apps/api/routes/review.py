@@ -31,6 +31,16 @@ if APIRouter is not None:
     router = APIRouter(prefix="/api", tags=["review"])
     review_service = ReviewService()
 
+    def _not_found_detail(exc: Exception) -> str:
+        """404 详情：不向前端返回本机绝对路径。"""
+        msg = str(exc)
+        if "manifest 不存在" in msg or "文件不存在" in msg or "不存在" in msg:
+            return (
+                "未找到项目或章节，请检查 project_id 与 chapter_id，"
+                "或打开演示章节 book_001/chapter_001"
+            )
+        return "未找到请求的资源"
+
     class UserDecisionItem(BaseModel):
         """单 segment 用户决策。"""
 
@@ -62,7 +72,7 @@ if APIRouter is not None:
         try:
             return review_service.get_review_data(project_id, chapter_id)
         except (FileNotFoundError, ManifestError) as exc:
-            raise HTTPException(status_code=404, detail=str(exc)) from exc
+            raise HTTPException(status_code=404, detail=_not_found_detail(exc)) from exc
 
     @router.get("/projects/{project_id}/chapters/{chapter_id}/cut-plan")
     def get_cut_plan(project_id: str, chapter_id: str) -> dict[str, Any]:
@@ -70,7 +80,7 @@ if APIRouter is not None:
         try:
             return review_service.get_cut_plan(project_id, chapter_id)
         except (FileNotFoundError, ManifestError) as exc:
-            raise HTTPException(status_code=404, detail=str(exc)) from exc
+            raise HTTPException(status_code=404, detail=_not_found_detail(exc)) from exc
 
     @router.put("/projects/{project_id}/chapters/{chapter_id}/cut-plan")
     def update_cut_plan(
@@ -108,7 +118,7 @@ if APIRouter is not None:
                 [d.model_dump() for d in body.decisions],
             )
         except (FileNotFoundError, ManifestError) as exc:
-            raise HTTPException(status_code=404, detail=str(exc)) from exc
+            raise HTTPException(status_code=404, detail=_not_found_detail(exc)) from exc
 
 else:
     router = None  # type: ignore[assignment]

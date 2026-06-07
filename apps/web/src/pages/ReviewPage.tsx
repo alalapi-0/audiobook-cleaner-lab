@@ -12,15 +12,27 @@ import {
 } from "../api/client";
 import WaveformEditor, { type DeleteRange } from "../components/WaveformEditor";
 
+interface DemoOption {
+  projectId: string;
+  chapterId: string;
+  label: string;
+}
+
 interface Props {
   projectId: string;
   chapterId: string;
+  demoOptions?: DemoOption[];
+  onOpenDemo?: () => void;
 }
 
 type UserAction = "keep" | "delete" | "uncertain";
 
 /** Review 三栏 MVP 页面 */
-export default function ReviewPage({ projectId, chapterId }: Props) {
+export default function ReviewPage({
+  projectId,
+  chapterId,
+  onOpenDemo,
+}: Props) {
   const [data, setData] = useState<ReviewData | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [userActions, setUserActions] = useState<Record<string, UserAction>>({});
@@ -65,6 +77,8 @@ export default function ReviewPage({ projectId, chapterId }: Props) {
 
   useEffect(() => {
     setLoading(true);
+    setError(null);
+    setSaveMsg(null);
     fetchReviewData(projectId, chapterId)
       .then((d) => {
         setData(d);
@@ -80,7 +94,7 @@ export default function ReviewPage({ projectId, chapterId }: Props) {
         }
         setDeleteRanges(buildInitialDeleteRanges(d.segments));
       })
-      .catch((e) => setError(String(e)))
+      .catch((e) => setError(e instanceof Error ? e.message : String(e)))
       .finally(() => setLoading(false));
   }, [projectId, chapterId, buildInitialDeleteRanges]);
 
@@ -106,7 +120,7 @@ export default function ReviewPage({ projectId, chapterId }: Props) {
       );
       await loadCutPlan();
     } catch (e) {
-      setSaveMsg(`保存失败: ${e}`);
+      setSaveMsg(`保存失败: ${e instanceof Error ? e.message : String(e)}`);
     }
   };
 
@@ -118,28 +132,59 @@ export default function ReviewPage({ projectId, chapterId }: Props) {
       });
       setSaveMsg("cut_plan 已更新（波形微调）");
     } catch (e) {
-      setSaveMsg(`cut_plan 保存失败: ${e}`);
+      setSaveMsg(`cut_plan 保存失败: ${e instanceof Error ? e.message : String(e)}`);
     }
   };
 
-  if (loading) return <p className="status">加载中…</p>;
-  if (error) return <p className="status error">加载失败: {error}</p>;
+  const exportCmd = `.venv/bin/python scripts/run_export.py --project-id ${projectId} --chapter-id ${chapterId} --dry-run`;
+
+  if (loading) return <p className="status page-status">加载中…</p>;
+
+  if (error) {
+    return (
+      <div className="error-panel">
+        <h2>无法加载章节</h2>
+        <p>{error}</p>
+        <p className="error-hint">请检查 URL 中的 project_id 与 chapter_id，或打开演示章节继续体验。</p>
+        {onOpenDemo && (
+          <button type="button" className="btn primary" onClick={onOpenDemo}>
+            打开演示章节 book_001 / chapter_001
+          </button>
+        )}
+      </div>
+    );
+  }
+
   if (!data) return null;
 
   return (
     <div className="review-page">
+      <div className="review-intro">
+        <p>
+          当前章节：<strong>{data.title}</strong>（{projectId} / {chapterId}）· 共{" "}
+          <strong>{data.segments.length}</strong> 个 segment。请逐条确认模型建议，保存后可用 CLI 导出。
+        </p>
+      </div>
+
       <div className="review-toolbar">
-        <span>
-          {data.title} · {data.segments.length} segments · engine: {data.llm_engine}
+        <span className="toolbar-meta">
+          engine: {data.llm_engine ?? "mock"}
         </span>
-        <button type="button" className="btn primary" onClick={handleSave}>
+        <button type="button" className="btn primary save-btn" onClick={handleSave}>
           保存 Review &amp; cut_plan
         </button>
         {saveMsg && <span className="save-msg">{saveMsg}</span>}
       </div>
 
+      {saveMsg && saveMsg.startsWith("已保存") && (
+        <aside className="export-hint">
+          <strong>下一步：导出音频</strong>
+          <p>Review 保存成功后，在仓库根目录运行：</p>
+          <code className="export-cmd">{exportCmd}</code>
+        </aside>
+      )}
+
       <div className="review-columns">
-        {/* 原文区 */}
         <section className="column source-column">
           <h2>原文</h2>
           <div className="text-block">{data.normalized_source_text}</div>
@@ -150,7 +195,6 @@ export default function ReviewPage({ projectId, chapterId }: Props) {
           )}
         </section>
 
-        {/* ASR 区 */}
         <section className="column asr-column">
           <h2>ASR Segments</h2>
           <ul className="segment-list">
@@ -173,7 +217,6 @@ export default function ReviewPage({ projectId, chapterId }: Props) {
           </ul>
         </section>
 
-        {/* 模型建议区 */}
         <section className="column decision-column">
           <h2>模型建议 &amp; 人工确认</h2>
           {selected ? (
@@ -229,6 +272,7 @@ export default function ReviewPage({ projectId, chapterId }: Props) {
       </div>
 
       <footer className="review-footer waveform-section">
+        <h2 className="waveform-title">波形微调</h2>
         <WaveformEditor
           audioUrl={audioServeUrl(data.source_audio)}
           deleteRanges={deleteRanges}
