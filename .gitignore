@@ -3,6 +3,9 @@
 .env.*
 !.env.example
 
+# MCP 配置本地备份
+.cursor/mcp.json.bak
+
 # 真实 API 运行报告（保留目录结构，排除大体积生成物）
 reports/real_api_runs/**/*
 !reports/real_api_runs/
