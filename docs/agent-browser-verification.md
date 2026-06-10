@@ -79,7 +79,7 @@ use context7 查询 Vite / React 最新文档，确认当前用法是否正确
 
 ```
 1. 启动 npm run dev
-2. 用 Playwright MCP 或 Chrome DevTools MCP 打开 http://127.0.0.1:5173
+2. 用 Playwright MCP 或 Chrome DevTools MCP 打开 http://localhost:5173
 3. 检查 console 与 network
 4. 运行 npm run agent:check
 5. 输出验证报告

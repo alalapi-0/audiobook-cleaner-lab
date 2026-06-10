@@ -1,0 +1,22 @@
+---
+description: "工具映射到任务阶段 — 见 docs/TOOL_USAGE_POLICY.md"
+alwaysApply: true
+---
+
+# Tool Usage
+
+任务阶段 → 工具：
+
+| 阶段 | 工具 |
+|------|------|
+| 理解仓库 | AGENTS.md + grep/glob/Read |
+| 最新文档 | WebSearch / context7 MCP |
+| UI 验证 | playwright MCP / chrome-devtools / `npm run test` |
+| GitHub 只读 | gh CLI / github MCP |
+| 设计输入 | stitch MCP → `docs/design/stitch/` |
+| 确定性 gate | `scripts/agent_gate.py` |
+| mock 流水线 | `auto_advance.py` |
+
+MCP 线程不可用时：记录 fallback，输出 `BLOCKED` 或改用 CLI 等价，**禁止假装**已做浏览器检查。
+
+工具清单：`agent_tools.yaml`。策略：`docs/TOOL_USAGE_POLICY.md`。

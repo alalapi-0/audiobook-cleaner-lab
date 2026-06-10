@@ -88,7 +88,7 @@ def main() -> int:
     print("✓ 自动推进验收通过（mock 模式）")
     print("  API:    http://127.0.0.1:8000/api/health")
     print(
-        "  Review: http://127.0.0.1:5173/?project_id=book_001&chapter_id=chapter_001"
+        "  Review: http://localhost:5173/?project_id=book_001&chapter_id=chapter_001"
     )
     print("  启动:   bash scripts/start_local.sh")
     print("  真实 LLM: 配置 .env 后运行 scripts/real_api_check.py")

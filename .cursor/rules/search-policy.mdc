@@ -1,0 +1,16 @@
+---
+description: "过期信息必须先搜索 — 见 docs/SEARCH_POLICY.md"
+alwaysApply: true
+---
+
+# Search Policy
+
+必须搜索：Cursor/Codex/MCP 能力、库 API 版本、模型 API、无法本地判断的报错、用户要求「最新/搜索」。
+
+优先：官方文档 > changelog > 官方 GitHub > 社区（辅助）。
+
+结果写入 `docs/RESEARCH_NOTES.md`（日期 + 不确定性）。
+
+无法搜索时记录 `TOOL_UNAVAILABLE_WEB_SEARCH`，不编造 API。
+
+`agent_layer.yaml`: `require_web_search_for_fresh_info: true`

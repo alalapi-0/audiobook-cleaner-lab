@@ -14,7 +14,7 @@ export default defineConfig({
   webServer: [
     {
       command:
-        'bash -c "cd ../.. && (.venv/bin/python scripts/seed_demo_chapter.py 2>/dev/null || true) && .venv/bin/python -m uvicorn apps.api.main:app --host 127.0.0.1 --port 8000"',
+        'bash -c "cd ../.. && (.venv/bin/python scripts/seed_demo_chapter.py --refresh-audio 2>/dev/null || true) && .venv/bin/python -m uvicorn apps.api.main:app --host 127.0.0.1 --port 8000"',
       url: "http://127.0.0.1:8000/api/health",
       reuseExistingServer: !process.env.CI,
       timeout: 60_000,

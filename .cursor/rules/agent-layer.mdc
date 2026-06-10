@@ -1,0 +1,17 @@
+---
+description: "Agent Layer 2.0 — 每轮必读协议与报告"
+alwaysApply: true
+---
+
+# Agent Layer 2.0
+
+1. Cursor 是本仓库**主力 Agent**。
+2. 每轮开始前读取：`AGENTS.md`、`agent_tools.yaml`、`agent_layer.yaml`、`reports/latest-agent-report.json`。
+3. 先做工具盘点或读取最近 `reports/tool_probe_report.json`（`python3 scripts/tool_probe.py`）。
+4. 新技术、新 API、MCP 配置、平台规则 → 搜索或 context7（见 `docs/SEARCH_POLICY.md`）。
+5. **不得**只改代码不跑 gate（`python3 scripts/agent_gate.py`）。
+6. UI 任务不得只做 terminal；须 Browser/Playwright/CLI E2E（见 `docs/USER_VIEW_TESTING.md`）。
+7. MCP 可用时评估是否适合本轮；可用未用须在报告中说明。
+8. 每轮结束更新 `reports/latest-agent-report.json` 并记录 `tool_usage`。
+9. 默认：`allow_real_api: false`、`allow_real_publish: false`、不自动 push。
+10. P0/P1 未清零不做 P2/P3 优化。

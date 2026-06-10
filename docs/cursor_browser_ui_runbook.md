@@ -108,7 +108,7 @@ BLOCKED: MISSING_FROM_THREAD_TOOL_REGISTRY
 
 1. **读取上下文**：README、AGENTS、ROADMAP、`docs/design/`、`docs/design/stitch/UI_TASKS.md`
 2. **启动项目**：`bash scripts/start_local.sh` 或 `npm run dev`（确保 API + Web 可访问）
-3. **打开页面**：使用 chrome-devtools 或 playwright 打开 Review 页（如 `http://127.0.0.1:5173/?project_id=book_001&chapter_id=chapter_001`）
+3. **打开页面**：使用 chrome-devtools 或 playwright 打开 Review 页（如 `http://localhost:5173/?project_id=book_001&chapter_id=chapter_001`）
 4. **保存 before screenshot**：存入 `docs/design/stitch/screenshots/` 或轮次报告目录
 5. **读取 Stitch 设计**：查阅已有导出物，或调用 Stitch MCP 生成/更新设计参考
 6. **选择一个 UI 改造切片**：例如「波形区布局」「切点列表样式」——每轮只做一个

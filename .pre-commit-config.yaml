@@ -1,0 +1,11 @@
+# AL-03: 提交前工具探针（需 pip install pre-commit && pre-commit install）
+repos:
+  - repo: local
+    hooks:
+      - id: tool-probe
+        name: audiobook tool probe (CI mode)
+        entry: python3 scripts/tool_probe.py --ci
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]

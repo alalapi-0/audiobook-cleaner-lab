@@ -17,7 +17,7 @@
 
 - 前端：`http://localhost:5173`（Vite；勿用 `127.0.0.1` 若仅监听 localhost）
 - API：`http://127.0.0.1:8000`
-- Review 示例：`http://127.0.0.1:5173/?project_id=book_001&chapter_id=chapter_001`
+- Review 示例：`http://localhost:5173/?project_id=book_001&chapter_id=chapter_001`（`127.0.0.1:5173` 亦可）
 
 ## 启动方式
 

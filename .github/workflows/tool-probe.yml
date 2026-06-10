@@ -1,0 +1,43 @@
+name: Tool Probe
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  tool-probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Install web dependencies
+        run: npm ci --prefix apps/web
+
+      - name: Run tool probe (CI mode)
+        run: python3 scripts/tool_probe.py --ci
+
+      - name: Upload tool probe report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tool-probe-report
+          path: reports/tool_probe_report.json
+          if-no-files-found: warn

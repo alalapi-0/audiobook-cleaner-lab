@@ -1,11 +1,20 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("user experience", () => {
-  test("homepage has demo chapter navigation", async ({ page }) => {
+  test("homepage has demo chapter navigation and import guide", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("h1")).toContainText("audiobook-cleaner-lab");
     await expect(page.getByRole("button", { name: "打开演示章节" })).toBeVisible();
     await expect(page.locator(".step-bar .step.active")).toContainText("Review");
+    await expect(page.locator(".import-guide")).toBeVisible();
+    await expect(page.locator(".import-guide")).toContainText("import_manifest.py");
+  });
+
+  test("export step shows CLI commands", async ({ page }) => {
+    await page.goto("/?project_id=book_001&chapter_id=chapter_001");
+    await page.getByRole("button", { name: "导出" }).click();
+    await expect(page.locator(".export-guide")).toBeVisible();
+    await expect(page.locator(".export-cmd").first()).toContainText("run_export.py");
   });
 
   test("review page loads without WaveSurfer init error", async ({ page }) => {

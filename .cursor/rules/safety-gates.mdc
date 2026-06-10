@@ -1,0 +1,14 @@
+---
+description: "安全门禁 — 无真实 API/发布/密钥"
+alwaysApply: true
+---
+
+# Safety Gates
+
+禁止：读/提交 `.env`、真实付费 ASR/LLM（gate 默认）、覆盖原音频、force push main、无审查 Stitch 覆盖 `apps/web`。
+
+提交前（若用户要求 commit）：`python3 scripts/agent_gate.py` 通过或记录失败原因。
+
+真实 API 仅：`real_api_check.py` + 用户 Key + `docs/testing/REAL_API_TESTING.md`。
+
+导出默认 `--dry-run`。详见 `docs/AGENT_SAFETY.md`。

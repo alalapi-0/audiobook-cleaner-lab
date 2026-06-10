@@ -1,0 +1,168 @@
+{
+  "timestamp": "2026-06-09T13:27:55.882594+00:00",
+  "repo": "audiobook-cleaner-lab",
+  "cwd": "/Users/alalapi/PycharmProjects/audiobook-cleaner-lab",
+  "agent_surface": "cursor",
+  "curator_note": "callable_now for MCP requires thread-level verification",
+  "CURSOR_CONFIG_VISIBILITY": "limited",
+  "CODEX_AVAILABLE": "manual",
+  "WEB_SEARCH_IN_THREAD": "available",
+  "binaries": [
+    {
+      "name": "git",
+      "available": true,
+      "path": "/usr/bin/git",
+      "summary": "/usr/bin/git"
+    },
+    {
+      "name": "node",
+      "available": true,
+      "path": "/opt/homebrew/bin/node",
+      "summary": "v26.0.0"
+    },
+    {
+      "name": "npm",
+      "available": true,
+      "path": "/opt/homebrew/bin/npm",
+      "summary": "11.12.1"
+    },
+    {
+      "name": "python3",
+      "available": true,
+      "path": "/opt/homebrew/bin/python3",
+      "summary": "Python 3.14.5"
+    },
+    {
+      "name": "uv",
+      "available": true,
+      "path": "/Users/alalapi/.local/bin/uv",
+      "summary": "uv 0.11.19 (7b2cff1c3 2026-06-03 aarch64-apple-darwin)"
+    },
+    {
+      "name": "ffmpeg",
+      "available": true,
+      "path": "/opt/homebrew/bin/ffmpeg",
+      "summary": "ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers"
+    },
+    {
+      "name": "gh",
+      "available": true,
+      "path": "/opt/homebrew/bin/gh",
+      "summary": "gh version 2.92.0 (2026-04-28)"
+    },
+    {
+      "name": "docker",
+      "available": false,
+      "path": null,
+      "summary": "not in PATH"
+    },
+    {
+      "name": "make",
+      "available": true,
+      "path": "/usr/bin/make",
+      "summary": "GNU Make 3.81"
+    },
+    {
+      "name": "java",
+      "available": false,
+      "path": "/usr/bin/java",
+      "summary": "The operation couldn’t be completed. Unable to locate a Java Runtime."
+    }
+  ],
+  "command_probes": [
+    {
+      "command": "git branch --show-current",
+      "exit_code": 0,
+      "available": true,
+      "summary": "main"
+    },
+    {
+      "command": "git status --short",
+      "exit_code": 0,
+      "available": true,
+      "summary": "M AGENTS.md"
+    },
+    {
+      "command": "npm run check:mcp",
+      "exit_code": 0,
+      "available": true,
+      "summary": "> audiobook-cleaner-lab-web@0.1.0 check:mcp"
+    },
+    {
+      "command": "npx playwright --version",
+      "exit_code": 0,
+      "available": true,
+      "summary": "Version 1.60.0"
+    }
+  ],
+  "mcp": {
+    "configured": true,
+    "servers": {
+      "playwright": {
+        "configured": true,
+        "callable_now": "unknown",
+        "note": "MCP 是否在当前 Agent 线程可调用需在对话中确认"
+      },
+      "chrome-devtools": {
+        "configured": true,
+        "callable_now": "unknown",
+        "note": "MCP 是否在当前 Agent 线程可调用需在对话中确认"
+      },
+      "context7": {
+        "configured": true,
+        "callable_now": "unknown",
+        "note": "MCP 是否在当前 Agent 线程可调用需在对话中确认"
+      },
+      "filesystem": {
+        "configured": true,
+        "callable_now": "unknown",
+        "note": "MCP 是否在当前 Agent 线程可调用需在对话中确认"
+      },
+      "github": {
+        "configured": true,
+        "callable_now": "unknown",
+        "note": "MCP 是否在当前 Agent 线程可调用需在对话中确认"
+      },
+      "stitch": {
+        "configured": true,
+        "callable_now": "unknown",
+        "note": "MCP 是否在当前 Agent 线程可调用需在对话中确认"
+      }
+    }
+  },
+  "cursor_artifacts": {
+    "rules_count": 11,
+    "rules": [
+      "agent-layer.mdc",
+      "cursor-browser-ui.mdc",
+      "mcp-agent-tools.mdc",
+      "mcp-required.mdc",
+      "no-multitask-for-browser.mdc",
+      "safety-gates.mdc",
+      "search-policy.mdc",
+      "stitch-design-mcp.mdc",
+      "tool-usage.mdc",
+      "user-view-testing.mdc",
+      "verification-gate.mdc"
+    ],
+    "skills_count": 1,
+    "skills": [
+      ".cursor/skills/browser-debug-check/SKILL.md"
+    ]
+  },
+  "agent_layer_files": {
+    "AGENTS.md": true,
+    "agent_tools.yaml": true,
+    "agent_layer.yaml": true
+  },
+  "ci": {
+    "mode": "ci",
+    "status": "partial",
+    "missing_required": [],
+    "blocked_env": [
+      "docker",
+      "java"
+    ],
+    "mcp_config_check_ok": true
+  }
+}

@@ -1,0 +1,217 @@
+version: 1
+updated_at: "2026-06-09"
+repo_name: audiobook-cleaner-lab
+
+agent_surfaces:
+  cursor:
+    primary: true
+    available: "yes"
+    recommended_use:
+      - local editing
+      - UI debugging
+      - browser-based user-view testing via MCP
+      - repo rule enforcement
+      - MCP-assisted workflows
+      - small incremental rounds
+    notes: "当前主力 Agent；需确认当前对话线程是否暴露 MCP 工具（见 docs/cursor_tool_registry_check.md）"
+  codex:
+    primary: false
+    available: "manual"
+    recommended_use:
+      - long-horizon implementation
+      - code review
+      - refactor
+      - cloud/background tasks
+      - worktree-based parallel tasks
+    notes: "额度有限时仅用于高价值任务；启动前读 AGENTS.md 与 docs/CODEX_HANDOFF.md"
+  local_scripts:
+    primary: true
+    available: true
+    recommended_use:
+      - deterministic gates
+      - reports
+      - smoke tests
+      - artifact checks
+
+tools:
+  shell:
+    available: true
+    safe_probe: pwd
+    use_for:
+      - run gates
+      - inspect repo
+      - run tests
+      - start local services
+    never_use_for:
+      - destructive deletion without approval
+      - printing secrets
+      - modifying .env
+  git:
+    available: true
+    safe_probe: git status --short
+    use_for:
+      - inspect changes
+      - branch workflow
+      - commit if user explicitly requests
+    never_use_for:
+      - reset --hard without explicit approval
+      - force push to main
+      - auto push without user request
+  node_npm:
+    available: true
+    safe_probe: node -v && npm -v
+    use_for:
+      - frontend build and test
+      - MCP config checks
+    never_use_for:
+      - publishing packages
+  python:
+    available: true
+    safe_probe: python3 --version
+    use_for:
+      - pipeline scripts
+      - FastAPI backend
+      - pytest
+    never_use_for:
+      - real paid ASR/LLM without explicit env flag
+  ffmpeg:
+    available: true
+    safe_probe: ffmpeg -version
+    use_for:
+      - audio export
+      - dry-run export validation
+    never_use_for:
+      - overwriting original audio
+  web_search:
+    available: true
+    use_for:
+      - latest official docs
+      - Cursor/Codex/MCP capability updates
+      - dependency API changes
+      - platform rules
+    fallback:
+      - ask user to provide docs
+      - use local docs and docs/RESEARCH_NOTES.md
+  context7:
+    configured: true
+    available: "thread_unknown"
+    callable_now: unknown
+    safe_probe: "MCP list tools (read-only)"
+    use_for:
+      - React Vite TypeScript docs
+      - FastAPI Pydantic docs
+      - Playwright API docs
+      - wavesurfer.js usage
+    fallback:
+      - web_search
+      - local node_modules types
+  browser:
+    configured: false
+    available: "thread_unknown"
+    callable_now: unknown
+    use_for:
+      - UI smoke via Cursor built-in browser when exposed
+    fallback:
+      - playwright MCP
+      - chrome-devtools MCP
+      - npm run test (Playwright CLI)
+  playwright:
+    configured: true
+    available: "thread_unknown"
+    callable_now: unknown
+    safe_probe: cd apps/web && npx playwright --version
+    use_for:
+      - e2e tests
+      - user-view flows
+      - regression after UI changes
+    fallback:
+      - npm run test in apps/web
+  chrome_devtools:
+    configured: true
+    available: "thread_unknown"
+    callable_now: unknown
+    safe_probe: "MCP list tools (read-only)"
+    use_for:
+      - inspect DOM
+      - console errors
+      - network failures
+      - before/after screenshots
+    fallback:
+      - playwright MCP or CLI tests
+  filesystem_mcp:
+    configured: true
+    available: "thread_unknown"
+    callable_now: unknown
+    safe_probe: "read project README via MCP"
+    allowed_scope: "${workspaceFolder}"
+    use_for:
+      - safe file inspection within workspace
+    fallback:
+      - Read tool / grep / glob
+  github_mcp:
+    configured: true
+    available: "thread_unknown"
+    callable_now: unknown
+    safe_probe: "gh auth status"
+    use_for:
+      - issues
+      - PRs
+      - remote repo inspection
+    risks:
+      - token exposure if misconfigured
+    fallback:
+      - gh CLI
+      - git remote inspect only
+  gh_cli:
+    available: true
+    safe_probe: gh --version
+    use_for:
+      - PR/issue read
+      - auth status check
+    never_use_for:
+      - auto push without user request
+  stitch_mcp:
+    configured: true
+    available: "thread_unknown"
+    callable_now: unknown
+    safe_probe: npm run check:stitch
+    use_for:
+      - UI design prototypes
+      - screen screenshots
+      - design exports to docs/design/stitch/
+    risks:
+      - STITCH_API_KEY required for live calls
+      - do not overwrite apps/web without review
+    fallback:
+      - docs/design/DESIGN.md and UI_TASKS.md
+  docker:
+    available: false
+    use_for: []
+    fallback:
+      - local python venv and npm
+  java_maven:
+    available: false
+    use_for: []
+    fallback: []
+
+project_specific:
+  real_api_check:
+    script: scripts/real_api_check.py
+    default: dry_run_or_skip
+    env_flag: LLM_API_KEY
+  auto_advance:
+    script: scripts/auto_advance.py
+    use_for: mock pipeline smoke
+  user_view_test:
+    script: scripts/user_view_test.py
+    use_for: structured user-perspective checklist
+
+policies:
+  default_real_api: false
+  default_real_publish: false
+  require_dry_run: true
+  require_report: true
+  require_gate_before_commit: true
+  require_tool_usage_log: true
+  no_auto_push: true
+  no_modify_env: true

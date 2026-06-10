@@ -1,0 +1,17 @@
+---
+description: "UI/Review 任务必须用户视角验证"
+globs: apps/web/**
+alwaysApply: false
+---
+
+# User View Testing
+
+涉及 `apps/web/` 或 Review 审核台时：
+
+1. `bash scripts/start_local.sh`
+2. before：截图 + console + network（MCP 或 CLI）
+3. 小切片改 UI
+4. `cd apps/web && npm run test`
+5. 可选 `python3 scripts/user_view_test.py`
+
+禁止 Multitask 控浏览器。清单：`docs/USER_VIEW_TESTING.md`。

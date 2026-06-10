@@ -1,20 +1,119 @@
 # AGENTS.md — AI Agent 工作规范
 
-本文档面向后续在本仓库中工作的 AI Agent（Cursor、Codex、Claude Code 等）。
+本文档面向后续在本仓库中工作的 AI Agent（**Cursor 主力**、Codex、Claude Code 等）。与 [agent_layer.yaml](agent_layer.yaml)、[agent_tools.yaml](agent_tools.yaml) 构成 **Tool-aware Agent Layer 2.0** 跨 Agent 协议。
 
-## Agent 工作前读取顺序
+## Repo Mission
+
+个人有声书音频清洗与文本对齐剪辑：**原文 + ASR + LLM 机切建议 + 人工 Review + FFmpeg 导出**。默认 mock 流水线可端到端验收；真实付费 API 默认关闭。
+
+## Agent 工作前读取顺序（Read First）
 
 按优先级依次阅读，**不要无脑全量读取整个仓库**：
 
-1. [README.md](README.md) — 项目目标与当前状态
-2. [AGENTS.md](AGENTS.md) — 本文档
-3. [PROJECT_STATE.md](PROJECT_STATE.md) — 当前 Stage/Round 与风险
-4. [docs/governance/repo_protocol_standard.yaml](docs/governance/repo_protocol_standard.yaml) — 治理协议
-5. [docs/governance/agent_reading_protocol.md](docs/governance/agent_reading_protocol.md) — 阅读策略
-6. [docs/STAGE_ROADMAP.md](docs/STAGE_ROADMAP.md) — 长期路线图
-7. **当前 round 文件** — `rounds/round-XX-*.md`
-8. 与本轮任务相关的设计文档（见 round 文件中的引用）
-9. 与本轮任务相关的 `packages/` 或 `apps/` 代码
+1. [AGENTS.md](AGENTS.md) — 本文档
+2. [agent_tools.yaml](agent_tools.yaml) — 工具清单与可用性
+3. [agent_layer.yaml](agent_layer.yaml) — 机器配置与命令
+4. [docs/TOOL_USAGE_POLICY.md](docs/TOOL_USAGE_POLICY.md) — 工具使用策略
+5. [docs/AGENT_RUNBOOK.md](docs/AGENT_RUNBOOK.md) — 轮次生命周期
+6. [reports/latest-agent-report.json](reports/latest-agent-report.json) — 上一轮报告（若存在）
+7. [README.md](README.md) — 项目目标与当前状态
+8. [PROJECT_STATE.md](PROJECT_STATE.md) — 当前 Stage/Round 与风险
+9. [docs/AGENT_ROADMAP.md](docs/AGENT_ROADMAP.md) — Agent 渐进轮（AL-01…）
+10. [docs/governance/repo_protocol_standard.yaml](docs/governance/repo_protocol_standard.yaml) — 治理协议
+11. [docs/governance/agent_reading_protocol.md](docs/governance/agent_reading_protocol.md) — 阅读策略
+12. [docs/STAGE_ROADMAP.md](docs/STAGE_ROADMAP.md) — 业务 Stage 路线图
+13. **当前 round 文件** — `rounds/round-XX-*.md`（业务轮）
+14. 与本轮任务相关的设计文档与代码
+
+**工具盘点**：开始前运行或读取 `python3 scripts/tool_probe.py` → [reports/tool_probe_report.json](reports/tool_probe_report.json)、[docs/TOOL_INVENTORY.md](docs/TOOL_INVENTORY.md)。
+
+## Tool Inventory
+
+见 [docs/TOOL_INVENTORY.md](docs/TOOL_INVENTORY.md) 与 [agent_tools.yaml](agent_tools.yaml)。MCP 已配置 6 个 server；**当前对话线程是否可调用须在工具列表中确认**。
+
+## Tool Usage Policy
+
+见 [docs/TOOL_USAGE_POLICY.md](docs/TOOL_USAGE_POLICY.md)。要点：UI 须 Browser/Playwright；库文档用 context7/WebSearch；每轮记录 `tool_usage`。
+
+## Search Policy
+
+见 [docs/SEARCH_POLICY.md](docs/SEARCH_POLICY.md)。依赖、工具能力、API、模型规则可能过期时**必须先搜索**；结果写入 [docs/RESEARCH_NOTES.md](docs/RESEARCH_NOTES.md)。
+
+## Safe Operating Rules
+
+见 [docs/AGENT_SAFETY.md](docs/AGENT_SAFETY.md)。`agent_layer.yaml`: `allow_real_api: false`, `allow_real_publish: false`。
+
+## Round Lifecycle
+
+见 [docs/AGENT_RUNBOOK.md](docs/AGENT_RUNBOOK.md)：读 → 探针 → 计划 → 搜索（若需）→ 实现 → gate → 用户视角（若 UI）→ 报告。
+
+## Common Commands
+
+```bash
+python3 scripts/tool_probe.py
+python3 scripts/check_repo.py
+bash scripts/start_local.sh
+python3 scripts/auto_advance.py
+npm run check:mcp && npm run check:stitch
+python3 scripts/agent_gate.py
+python3 scripts/user_view_test.py   # 需服务运行
+```
+
+## Gate Commands
+
+`python3 scripts/agent_gate.py` → [reports/gate_result.json](reports/gate_result.json)。提交前（若用户要求）须通过或记录失败原因。
+
+## Severity Rules
+
+| 级别 | 说明 |
+|------|------|
+| P0 | 数据丢失、密钥、无法启动、误发 API/发布 |
+| P1 | 主流程不可用、核心测试失败 |
+| P2 | 非核心、UI/UX |
+| P3 | 文档、打磨 |
+
+P0/P1 未清零不做 P2/P3。
+
+## Report Format
+
+Schema: [schemas/agent_round_report.schema.json](schemas/agent_round_report.schema.json)。输出: [reports/latest-agent-report.json](reports/latest-agent-report.json)，审计: [reports/agent_audit_log.jsonl](reports/agent_audit_log.jsonl)。规范: [docs/AGENT_REPORTING.md](docs/AGENT_REPORTING.md)。
+
+## Cursor-specific Notes
+
+- 主力 Agent；普通前台对话，**禁止 Multitask 控浏览器**
+- 规则: `.cursor/rules/`（含 agent-layer、tool-usage、search-policy、safety-gates）
+- MCP 批准后重启 Cursor + 新对话；见 [docs/cursor_tool_registry_check.md](docs/cursor_tool_registry_check.md)
+- Prompt 模板: [docs/PROMPTS.md](docs/PROMPTS.md)
+
+## Codex-specific Notes
+
+- 启动前读本文 + [docs/CODEX_USAGE.md](docs/CODEX_USAGE.md)
+- Handoff: [docs/CODEX_HANDOFF.md](docs/CODEX_HANDOFF.md)
+- 额度有限：仅高价值任务；小修用 Cursor
+
+## MCP-specific Notes
+
+6 个 Workspace MCP（见下文 MCP Tools 章节）。探针禁止写操作/付费调用。不可用记 fallback。
+
+## Browser / Playwright Notes
+
+[docs/USER_VIEW_TESTING.md](docs/USER_VIEW_TESTING.md)、[docs/cursor_browser_ui_runbook.md](docs/cursor_browser_ui_runbook.md)。Review URL: `http://localhost:5173/?project_id=book_001&chapter_id=chapter_001`。
+
+## Real API / Real Publish Rules
+
+默认 mock；真实 LLM: `.env` + `real_api_check.py`；无社交平台自动发布。成本: [docs/COST_CONTROL.md](docs/COST_CONTROL.md)。
+
+## Commit / Push Policy
+
+仅用户明确要求时 commit；**默认不 push**；不提交 `.env`/密钥/真实素材。
+
+## Next Round Policy
+
+读 `latest-agent-report.json` → 选 [docs/AGENT_ROADMAP.md](docs/AGENT_ROADMAP.md) 下一 AL 条目 → 小范围 → gate → 报告。
+
+## Human Required Decisions
+
+配置 API Key、批准 MCP/重启 Cursor、扩大 round 范围、force push、删除 data 用户文件。
 
 ## 禁止事项
 

@@ -4,10 +4,14 @@
 
 ## 必读
 
-1. [README.md](README.md)
-2. [AGENTS.md](AGENTS.md)
-3. [PROJECT_STATE.md](PROJECT_STATE.md)
-4. [docs/agent_workflow/README.md](docs/agent_workflow/README.md)
+1. [AGENTS.md](AGENTS.md)
+2. [agent_tools.yaml](agent_tools.yaml)
+3. [agent_layer.yaml](agent_layer.yaml)
+4. [reports/latest-agent-report.json](reports/latest-agent-report.json)
+5. [README.md](README.md)
+6. [PROJECT_STATE.md](PROJECT_STATE.md)
+7. [docs/AGENT_RUNBOOK.md](docs/AGENT_RUNBOOK.md)
+8. [docs/agent_workflow/README.md](docs/agent_workflow/README.md)
 
 ## MCP（6 个）
 
@@ -60,9 +64,11 @@
 ## 验收
 
 ```bash
+python3 scripts/tool_probe.py
 python3 scripts/check_repo.py
 npm run check:mcp
 npm run check:stitch
 npm run check:cursor-mcp
 python3 scripts/agent_gate.py
+python3 scripts/user_view_test.py   # 需 start_local.sh
 ```

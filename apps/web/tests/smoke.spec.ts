@@ -29,14 +29,27 @@ test.describe("smoke", () => {
     expect(unexpectedConsoleErrors(errors), `console errors:\n${errors.join("\n")}`).toEqual([]);
   });
 
-  for (const path of ["/review", "/admin", "/workbench", "/preview"]) {
-    test(`optional route ${path} loads without server error`, async ({ page }) => {
+  test("review alias route loads review home", async ({ page }) => {
+    const errors = trackConsoleErrors(page);
+    const response = await page.goto("/review");
+
+    expect(response?.status() ?? 0).toBeLessThan(500);
+    await expect(page.locator(".import-guide")).toBeVisible();
+    await expect(page.getByRole("button", { name: "保存 Review & cut_plan" })).toBeVisible({
+      timeout: 15_000,
+    });
+
+    expect(unexpectedConsoleErrors(errors), `console errors:\n${errors.join("\n")}`).toEqual([]);
+  });
+
+  for (const path of ["/admin", "/workbench", "/preview"]) {
+    test(`planned route ${path} shows planning notice`, async ({ page }) => {
       const errors = trackConsoleErrors(page);
       const response = await page.goto(path);
 
       expect(response?.status() ?? 0).toBeLessThan(500);
-      // SPA fallback：未知路由仍应渲染根应用壳
-      await expect(page.locator(".app-header")).toBeVisible();
+      await expect(page.locator(".planned-page")).toBeVisible();
+      await expect(page.locator(".planned-badge")).toContainText("规划中");
 
       expect(
         unexpectedConsoleErrors(errors),
@@ -44,4 +57,10 @@ test.describe("smoke", () => {
       ).toEqual([]);
     });
   }
+
+  test("unknown route shows 404 notice", async ({ page }) => {
+    await page.goto("/does-not-exist");
+    await expect(page.locator(".planned-page")).toBeVisible();
+    await expect(page.locator(".planned-badge")).toContainText("404");
+  });
 });

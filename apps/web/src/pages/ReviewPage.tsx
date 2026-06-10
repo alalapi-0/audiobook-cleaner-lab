@@ -12,17 +12,11 @@ import {
 } from "../api/client";
 import WaveformEditor, { type DeleteRange } from "../components/WaveformEditor";
 
-interface DemoOption {
-  projectId: string;
-  chapterId: string;
-  label: string;
-}
-
 interface Props {
   projectId: string;
   chapterId: string;
-  demoOptions?: DemoOption[];
   onOpenDemo?: () => void;
+  showInlineExport?: boolean;
 }
 
 type UserAction = "keep" | "delete" | "uncertain";
@@ -32,6 +26,7 @@ export default function ReviewPage({
   projectId,
   chapterId,
   onOpenDemo,
+  showInlineExport = true,
 }: Props) {
   const [data, setData] = useState<ReviewData | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -176,10 +171,10 @@ export default function ReviewPage({
         {saveMsg && <span className="save-msg">{saveMsg}</span>}
       </div>
 
-      {saveMsg && saveMsg.startsWith("已保存") && (
+      {showInlineExport && saveMsg && saveMsg.startsWith("已保存") && (
         <aside className="export-hint">
           <strong>下一步：导出音频</strong>
-          <p>Review 保存成功后，在仓库根目录运行：</p>
+          <p>Review 保存成功后，在仓库根目录运行（或点击顶部步骤条「导出」查看完整命令）：</p>
           <code className="export-cmd">{exportCmd}</code>
         </aside>
       )}

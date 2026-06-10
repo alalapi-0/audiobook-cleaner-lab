@@ -39,7 +39,7 @@
 ## 执行流程
 
 1. 启动项目：`bash scripts/start_local.sh` 或等价命令。
-2. 用 chrome-devtools 或 playwright 打开 Review 页（如 http://127.0.0.1:5173/?project_id=book_001&chapter_id=chapter_001）。
+2. 用 chrome-devtools 或 playwright 打开 Review 页（如 http://localhost:5173/?project_id=book_001&chapter_id=chapter_001）。
 3. **Before**：截图 + 检查 console + 检查 network，记录 before 状态。
 4. 读取 Stitch 设计（`docs/design/stitch/` 或调用 Stitch MCP）作为设计输入，**禁止**无审查覆盖业务代码。
 5. 从 UI_TASKS 或 ROADMAP 中 **只选择一个 UI 切片** 实现。

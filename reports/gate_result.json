@@ -1,0 +1,81 @@
+{
+  "status": "passed",
+  "timestamp": "2026-06-10T13:10:34.028618+00:00",
+  "passed": [
+    "agent_layer: AGENTS.md",
+    "agent_layer: agent_layer.yaml",
+    "agent_layer: agent_tools.yaml",
+    "agent_layer: docs/TOOL_USAGE_POLICY.md",
+    "agent_layer: docs/AGENT_RUNBOOK.md",
+    "agent_layer: docs/AGENT_ROADMAP.md",
+    "agent_layer: docs/SEARCH_POLICY.md",
+    "agent_layer: schemas/agent_round_report.schema.json",
+    "artifact: .cursor/mcp.json",
+    "artifact: .cursor/skills/browser-debug-check/SKILL.md",
+    "artifact: .cursor/rules/verification-gate.mdc",
+    "artifact: .cursor/rules/mcp-agent-tools.mdc",
+    "artifact: docs/agent-browser-verification.md",
+    "artifact: docs/agent_skills/mcp_usage_skill.md",
+    "artifact: scripts/check_mcp_config.py",
+    "mcp.json: all required servers present",
+    "check_repo.py",
+    "check_environment.py",
+    "compileall",
+    "npm run agent:check"
+  ],
+  "failed": [],
+  "skipped": [
+    "pytest: skipped: pytest not installed in venv"
+  ],
+  "blocked": [],
+  "commands": [
+    {
+      "name": "check_repo.py",
+      "command": "check_repo.py",
+      "exit_code": 0,
+      "summary": "passed"
+    },
+    {
+      "name": "check_environment.py",
+      "command": "check_environment.py",
+      "exit_code": 0,
+      "summary": "passed"
+    },
+    {
+      "name": "compileall",
+      "command": "compileall",
+      "exit_code": 0,
+      "summary": "passed"
+    },
+    {
+      "name": "pytest",
+      "command": "pytest",
+      "exit_code": 0,
+      "summary": "skipped: pytest not installed in venv"
+    },
+    {
+      "name": "npm run agent:check",
+      "command": "npm run agent:check",
+      "exit_code": 0,
+      "summary": "passed"
+    }
+  ],
+  "tool_usage": [
+    {
+      "tool": "shell",
+      "used": true,
+      "purpose": "run gates"
+    },
+    {
+      "tool": "web_search",
+      "used": false,
+      "reason": "gate script only"
+    },
+    {
+      "tool": "playwright_mcp",
+      "used": false,
+      "reason": "CLI playwright via npm test instead"
+    }
+  ],
+  "next_action": "continue_next_round"
+}
